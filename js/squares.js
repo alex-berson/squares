@@ -4,6 +4,20 @@ let player = 1;
 
 const touchScreen = () => matchMedia('(hover: none)').matches;
 
+const changeColor = () => player == 1 ? player = 2 : player = 1;
+
+const shuffle = ([...array]) => {
+
+    for (let i = array.length - 1; i > 0; i--) {
+
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [array[i], array[j]] = [array[j], array[i]]; 
+    }
+
+    return array;
+}
+
 const dashSquares = (selectedDash) => {
 
     let dashes = document.querySelectorAll('.dash');
@@ -80,7 +94,7 @@ const checkWin = () => {
     }
 }
 
-checkSquares = (squares) => {
+const occupySquares = (squares) => {
 
     let boxes = document.querySelectorAll('.box');
 
@@ -110,13 +124,102 @@ checkSquares = (squares) => {
 
 }
 
-const select = (e) => {
+const getDash = (square, side) => {
 
-    // console.log("SELECT");
+    let dash = 0;
+    let dashes = document.querySelectorAll('.dash');
+    let dashesV = document.querySelectorAll('.dash-v');
+
+    console.log(dashes, dashesV);
+
+
+    switch (side) {
+
+        case 0:
+            dash = dashes[square];
+            break;
+        case 1:
+            dash = dashesV[square + Math.floor(square / size) + 1];
+            // console.log(square + Math.floor(square / size) + 1);
+            break;
+        case 2:
+            dash = dashes[square + size];
+            break;
+        case 3:
+            dash = dashesV[square + Math.floor(square / size)];
+            break;
+    }
+
+    console.log(dash);
+
+    return dash;
+}
+
+const aiTurn = () => {
+
+    let squares = shuffle(Array.from({length: size * size}, (_, i) => i));
+    let sides = shuffle([0, 1, 2, 3]);
+
+    console.log(squares);
+    console.log(sides);
+
+
+    outer: for (let square of squares) {
+
+        for (let side of sides) {
+
+            if (board[square][side] == 0) {
+
+                let dash = getDash(square, side);
+
+                console.log(square, side);
+                // console.log(dash);
+
+                if (select(dash)) {
+                    setTimeout(aiTurn, 500);
+                    return;
+                }
+
+                break outer;
+            }
+        }
+    }
+
+    changeColor();
+    setTimeout(enableTouch, 500);
+
+} 
+
+const humanTurn = (e) => {
 
     let dash = e.currentTarget;
 
-    if (dash.classList.contains("blue") || dash.classList.contains("pink")) return;
+    disableTouch();
+
+    if (!select(dash)) {
+
+        changeColor();
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                setTimeout(aiTurn, 500);
+            });
+        }); 
+        
+        return;
+
+    }
+
+    enableTouch();
+}
+
+const select = (dash) => {
+
+    dash = dash.currentTarget ? dash.currentTarget : dash;
+
+    // let dash = e.currentTarget;
+
+    if (dash.classList.contains("blue") || dash.classList.contains("pink")) return true;
 
     switch (player) {
         case 1:
@@ -129,13 +232,15 @@ const select = (e) => {
             break;
     }
 
-    console.log(dashSquares(dash));
+    // console.log(dashSquares(dash));
 
     let squares = dashSquares(dash);
 
     updateBoard(squares);
 
-    if (!checkSquares(squares)) player == 1 ? player = 2 : player = 1;
+    if (occupySquares(squares)) return true;
+
+    return false;
 } 
 
 const initBoard = () => {
@@ -152,9 +257,9 @@ const initBoard = () => {
 const disableTouch = () => {
     document.querySelectorAll('.dash, .dash-v').forEach((dash) => {
         if (touchScreen()){
-            dash.removeEventListener('touchstart', select);
+            dash.removeEventListener('touchstart', humanTurn);
         } else {
-            dash.removeEventListener('mousedown', select);
+            dash.removeEventListener('mousedown', humanTurn);
         }
     });
 }
@@ -162,9 +267,9 @@ const disableTouch = () => {
 const enableTouch = () => {
     document.querySelectorAll('.dash, .dash-v').forEach((dash) => {
         if (touchScreen()){
-            dash.addEventListener('touchstart', select);
+            dash.addEventListener('touchstart', humanTurn);
         } else {
-            dash.addEventListener('mousedown', select);
+            dash.addEventListener('mousedown', humanTurn);
         }
     });
 }
