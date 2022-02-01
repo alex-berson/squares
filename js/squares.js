@@ -60,8 +60,7 @@ const updateBoard = (dashes) => {
         board[dash[0]][dash[1]] = player;
     })
 
-    console.log(board);
-
+    console.log(board.map(arr => arr.slice()));
 } 
 
 const checkWin = () => {
@@ -130,7 +129,7 @@ const getDash = (square, side) => {
     let dashes = document.querySelectorAll('.dash');
     let dashesV = document.querySelectorAll('.dash-v');
 
-    console.log(dashes, dashesV);
+    // console.log(dashes, dashesV);
 
 
     switch (side) {
@@ -140,7 +139,6 @@ const getDash = (square, side) => {
             break;
         case 1:
             dash = dashesV[square + Math.floor(square / size) + 1];
-            // console.log(square + Math.floor(square / size) + 1);
             break;
         case 2:
             dash = dashes[square + size];
@@ -150,44 +148,134 @@ const getDash = (square, side) => {
             break;
     }
 
-    console.log(dash);
+    // console.log(dash);
 
     return dash;
 }
 
-const aiTurn = () => {
+const randomAI = () => {
 
     let squares = shuffle(Array.from({length: size * size}, (_, i) => i));
     let sides = shuffle([0, 1, 2, 3]);
 
-    console.log(squares);
-    console.log(sides);
+    for (let square of squares) {
+        for (let side of sides) {
+            if (!board[square][side]) return [square, side];
+        }
+    }
 
+    return [null, null];
+}
 
-    outer: for (let square of squares) {
+const threeSides = (squares, sides) => {
+
+    for (let square of squares) {
+
+        let openedSide = 0;
+        let numOpened = 0;
 
         for (let side of sides) {
+            if (!board[square][side]) {
+                openedSide = side;
+                numOpened++
+            }
+        }
 
-            if (board[square][side] == 0) {
+        if (numOpened == 1) return [square, openedSide];
+    }
 
-                let dash = getDash(square, side);
+    return [null, null];
+}
 
-                console.log(square, side);
-                // console.log(dash);
+const ajacentSquareOpened = (square) => {
 
-                if (select(dash)) {
-                    setTimeout(aiTurn, 500);
-                    return;
-                }
+        let numOpened = 0;
 
-                break outer;
+        for (let i = 0; i < 4; i++) {
+            if (!board[square][i]) {
+                numOpened++
+            }
+        }
+
+        return numOpened;
+}
+
+const oneSide = (squares, sides) => {
+
+    for (let square of squares) {
+
+        let openedSides = [];
+        let numOpened = 0;
+
+        for (let side of sides) {
+            if (!board[square][side]) {
+                openedSides.push(side);
+                numOpened++
+            }
+        }
+
+        if (numOpened < 3) continue;
+
+        for (let side of openedSides) {
+
+            switch (side) {
+
+                case 0:
+                    if (square < size) return [square, side];
+                    if (square >= size && ajacentSquareOpened(square - size) >= 3) return [square, side];
+                    break;
+                case 1:
+                    if ((square + 1) % size == 0) return [square, side];
+                    if ((square + 1) % size && ajacentSquareOpened(square + 1) >= 3) return [square, side];
+                    break;
+                case 2:
+                    if (square >= size * (size - 1)) return [square, side];
+                    if (square < size * (size - 1) && ajacentSquareOpened(square + size) >= 3) return [square, side];
+                    break;
+                case 3:
+                    if (square % size == 0) return [square, side];
+                    if (square % size && ajacentSquareOpened(square - 1) >= 3) return [square, side];
+                    break;
             }
         }
     }
 
+    return [null, null];
+}
+
+const simpleAI = () => {
+
+    let squares = shuffle(Array.from({length: size * size}, (_, i) => i));
+    let sides = shuffle([0, 1, 2, 3]);
+
+    let [square, side] = threeSides(squares, sides);
+
+    if (square != null) return [square, side];
+    
+    [square, side] = oneSide(squares, sides);
+
+    if (square != null) return [square, side];   
+    
+    [square, side] = randomAI();
+
+    return [square, side];
+}
+
+const aiTurn = () => {
+
+    let [square, side] = simpleAI();
+
+    if (square == null) return;
+    
+    let dash = getDash(square, side);
+
+    if (select(dash)) {
+        setTimeout(aiTurn, 500);
+        return;
+    }
+
     changeColor();
     setTimeout(enableTouch, 500);
-
 } 
 
 const humanTurn = (e) => {
