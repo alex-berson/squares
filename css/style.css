@@ -13,9 +13,15 @@
     --size: 86vmin;
 }
 
-body{
+* {
+    box-sizing: border-box;
+}
+
+body {
     font-family: 'Roboto', serif;
     margin: 0px;
+    opacity: 0;
+    transition: opacity 2s ease;
 }
 
 #outer {
@@ -37,7 +43,7 @@ body{
     margin-right: auto;
 }
 
-h1{
+h1 {
     color: black;
     text-align: center;
     font-size: 23.5vw;
@@ -47,15 +53,12 @@ h1{
 span:nth-child(odd) {
     color: lightskyblue;
 }
+
 span:nth-child(even) {
     color: pink;
 }
 
-* {
-    box-sizing: border-box;
-}
-
-.board{
+.board {
     /* background-color: blanchedalmond; */
     /* height: 320px; */
     width: var(--size);
@@ -114,7 +117,7 @@ span:nth-child(even) {
     /* background-color: beige; */
     margin-top: calc((var(--size) - var(--size) / 16 * 3.5 * 3 - var(--size) / 16 * 4) / 6);
     margin-bottom: calc((var(--size) - var(--size) / 16 * 3.5 * 3 - var(--size) / 16 * 4) / 6);
-
+    /* transition: background-color 5s linear; */
 }
 
 .dash-v {
@@ -166,15 +169,15 @@ span:nth-child(even) {
 } */
 
 .box {
-    /* background-color: white; */
-    background-color: slategray;
+    background-color: white;
+    /* background-color: slategray; */
 
     /* border: 1px solid black; */
     border-radius: 20%;
-    opacity: 0;
+    /* opacity: 0; */
     width:  calc(var(--size) / 16 * 3.5);
     height:  calc(var(--size) / 16 * 3.5);
-    transition: opacity 0.5s linear;
+    transition: background-color 0.5s 0.5s linear;
     z-index: -1;
 }
 
@@ -182,7 +185,7 @@ span:nth-child(even) {
     cursor: pointer;
 }
 
-#designed{
+#designed {
     line-height: 100%;
     font-size: 7px;
     font-weight: bold;
@@ -192,33 +195,33 @@ span:nth-child(even) {
 
 .blue {
     background-color: lightskyblue;
-    opacity: 1;
+    /* opacity: 1; */
 
 }
 
 .pink {
     background-color: pink;
-    opacity: 1;
+    /* opacity: 1; */
 }
 
 
-@media (orientation: landscape) and (max-height: 460px){
+@media (orientation: landscape) and (max-height: 460px) {
     h1{
         display: none;
     }
 }
 
-@media (min-width: 460px) and (min-height: 460px){
+@media (min-width: 460px) and (min-height: 460px) {
 
     :root {
         --size: 400px;
     }
 
-    h1{
+    h1 {
         font-size: 7em;
     } 
 
-    #designed{
+    #designed {
         font-size: 0.5em;
         font-weight: bold;
         text-align: center;
