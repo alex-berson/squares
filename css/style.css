@@ -84,9 +84,18 @@ span:nth-child(even) {
     height: calc(var(--size) / 16);
 }
 
-.dash {
+.container {
+    display: grid;
+}
+
+.placeholder, .dash {
     display: grid;
     position: relative; 
+    /* position:absolute; */
+
+    grid-column: 1;
+    grid-row: 1;
+
     place-items: center;
     /* background-color: white; */
     /* border: 1px solid black; */
@@ -94,10 +103,15 @@ span:nth-child(even) {
     border-radius: calc(var(--size) / 16 / 2);
     width: calc(var(--size) / 16 * 3.5);
     height: calc(var(--size) / 16);
-    transition: background-color 0.5s linear;
+    transition: opacity 0.5s linear;
+    /* opacity: 0; */
 }
 
-.dash:after {
+.dash {
+    opacity: 0;
+}
+
+.placeholder:after, .dash:after {
     content: '';
     position: absolute;
     top: calc(var(--size) / -16);
@@ -120,19 +134,26 @@ span:nth-child(even) {
     /* transition: background-color 5s linear; */
 }
 
-.dash-v {
+.placeholder-v, .dash-v {
     /* background-color: white; */
     /* border: 1px solid black; */
     position: relative; 
+
+    grid-column: 1;
+    grid-row: 1;
 
     background-color: whitesmoke;
     border-radius: calc(var(--size) / 16 / 2);
     width: calc(var(--size) / 16);
     height: calc(var(--size) / 16 * 3.5);
-    transition: background-color 0.5s linear;
+    transition: opacity 0.5s linear;
 } 
 
-.dash-v:after {
+.dash-v {
+    opacity: 0;
+}
+
+.placeholder-v:after, .dash-v:after {
 
     content: '';
     position: absolute;
@@ -169,15 +190,15 @@ span:nth-child(even) {
 } */
 
 .box {
-    background-color: white;
+    /* background-color: white; */
     /* background-color: slategray; */
 
     /* border: 1px solid black; */
     border-radius: 20%;
-    /* opacity: 0; */
+    opacity: 0;
     width:  calc(var(--size) / 16 * 3.5);
     height:  calc(var(--size) / 16 * 3.5);
-    transition: background-color 0.5s 0.5s linear;
+    /* transition: opacity 0.5s 0.5s linear; */
     z-index: -1;
 }
 
@@ -196,12 +217,26 @@ span:nth-child(even) {
 .blue {
     background-color: lightskyblue;
     /* opacity: 1; */
+    /* transition: opacity 0.5s linear; */
+
 
 }
 
 .pink {
     background-color: pink;
     /* opacity: 1; */
+    /* transition: background-color 0.5s linear; */
+}
+
+@keyframes fill {
+
+    50% {
+        opacity : 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 
