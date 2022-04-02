@@ -24,7 +24,8 @@ const alphabeta = (dashes, squares, depth, alpha, beta, maximizingPlayer, startT
     let bestDash = freeSeq[Math.floor(Math.random() * freeSeq.length)];
 
     if (depth == 0 || freeSeq.length == 0) return [null, evaluation(squares)];
-    if (timeOver(startTime, timeLimit)) return [null, null];
+    
+    if (timeOver(startTime, timeLimit)) {cut = true;  return [null, null]};
     // if (initialColumnes != null) validMoves = [...new Set([...initialColumnes, ...validMoves])];
 
     if (maximizingPlayer) {
@@ -83,10 +84,10 @@ const alphabeta = (dashes, squares, depth, alpha, beta, maximizingPlayer, startT
     }
 }
 
-const minimax = (dashes, squares , delay) => {
+const minimax = (dashes, squares) => {
 
     let startTime = new Date();
-    let timeLimit = 1000 + delay;
+    let timeLimit = 500;
     let dash, score, lastDash, lastScore;
     depth = 1;
 
@@ -106,11 +107,11 @@ const minimax = (dashes, squares , delay) => {
 
     // await new Promise(r => setTimeout(r, timeLimit - (new Date() - startTime)));
 
-    console.log("depth", depth - 1);
+    // console.log("depth", depth - 1);
 
     // alert(depth - 1);
 
-    console.log(lastDash, lastScore);
+    // console.log(lastDash, lastScore);
 
 
     // depth -= 2;

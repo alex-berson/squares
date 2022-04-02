@@ -11,14 +11,13 @@
     <meta name="apple-itunes-app" content="">
     <meta name="google" content="notranslate">
 
-
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <script src="js/mcts.js" defer></script>
-    <script src="js/mcs.js" defer></script>
+    
+    <script src="js/squares.js" defer></script>
+    <script src="js/ui.js" defer></script>
     <script src="js/simpleai.js" defer></script>
     <script src="js/minimax.js" defer></script>
-    <script src="js/ui.js" defer></script>
-    <script src="js/squares.js" defer></script>
+    <script src="js/mcts.js" defer></script>
 </head>
 <body class="noselect">
     <div id="outer">
@@ -33,139 +32,77 @@
                     <div class="board">
                         <div class="dots">
                             <div class=dot></div>
-                            <div class="container">
-                                <div class="placeholder"></div>
-                                <div class="dash"></div>
-                            </div>
+                            <div class=dash></div>
                             <div class=dot></div>
-                            <div class="container">
-                                <div class="placeholder"></div>
-                                <div class="dash"></div>
-                            </div>
+                            <div class=dash></div>
                             <div class=dot></div>
-                            <div class="container">
-                                <div class="placeholder"></div>
-                                <div class="dash"></div>
-                            </div>
+                            <div class=dash></div>
                             <div class=dot></div>
                         </div>
                         <div class="boxes">
-                            <div class="container">
-                                <div class="placeholder-v"></div>
-                                <div class="dash-v"></div>
-                            </div>
+                            <div class=dash-v></div>
                             <div class=box></div>
-                            <div class="container">
-                                <div class="placeholder-v"></div>
-                                <div class="dash-v"></div>
-                            </div>
+                            <div class=dash-v></div>
                             <div class=box></div>
-                            <div class="container">
-                                <div class="placeholder-v"></div>
-                                <div class="dash-v"></div>
-                            </div>
+                            <div class=dash-v></div>
                             <div class=box></div>
-                            <div class="container">
-                                <div class="placeholder-v"></div>
-                                <div class="dash-v"></div>
-                            </div>
+                            <div class=dash-v></div>
                         </div>
                         <div class="dots">
                             <div class=dot></div>
-                            <div class="container">
-                                <div class="placeholder"></div>
-                                <div class="dash"></div>
-                            </div>
+                            <div class=dash></div>
                             <div class=dot></div>
-                            <div class="container">
-                                <div class="placeholder"></div>
-                                <div class="dash"></div>
-                            </div>
+                            <div class=dash></div>
                             <div class=dot></div>
-                            <div class="container">
-                                <div class="placeholder"></div>
-                                <div class="dash"></div>
-                            </div>
+                            <div class=dash></div>
                             <div class=dot></div>
                         </div>
                         <div class="boxes">
-                            <div class="container">
-                                <div class="placeholder-v"></div>
-                                <div class="dash-v"></div>
-                            </div>
+                            <div class=dash-v></div>
                             <div class=box></div>
-                            <div class="container">
-                                <div class="placeholder-v"></div>
-                                <div class="dash-v"></div>
-                            </div>
+                            <div class=dash-v></div>
                             <div class=box></div>
-                            <div class="container">
-                                <div class="placeholder-v"></div>
-                                <div class="dash-v"></div>
-                            </div>
+                            <div class=dash-v></div>
                             <div class=box></div>
-                            <div class="container">
-                                <div class="placeholder-v"></div>
-                                <div class="dash-v"></div>
-                            </div>
+                            <div class=dash-v></div>
                         </div>
                         <div class="dots">
                             <div class=dot></div>
-                            <div class="container">
-                                <div class="placeholder"></div>
-                                <div class="dash"></div>
-                            </div>
+                            <div class=dash></div>
                             <div class=dot></div>
-                            <div class="container">
-                                <div class="placeholder"></div>
-                                <div class="dash"></div>
-                            </div>
+                            <div class=dash></div>
                             <div class=dot></div>
-                            <div class="container">
-                                <div class="placeholder"></div>
-                                <div class="dash"></div>
-                            </div>
+                            <div class=dash></div>
                             <div class=dot></div>
                         </div>
                         <div class="boxes">
-                            <div class="container">
-                                <div class="placeholder-v"></div>
-                                <div class="dash-v"></div>
-                            </div>
+                            <div class=dash-v></div>
                             <div class=box></div>
-                            <div class="container">
-                                <div class="placeholder-v"></div>
-                                <div class="dash-v"></div>
-                            </div>
+                            <div class=dash-v></div>
                             <div class=box></div>
-                            <div class="container">
-                                <div class="placeholder-v"></div>
-                                <div class="dash-v"></div>
-                            </div>
+                            <div class=dash-v></div>
                             <div class=box></div>
-                            <div class="container">
-                                <div class="placeholder-v"></div>
-                                <div class="dash-v"></div>
-                            </div>
+                            <div class=dash-v></div>
                         </div>
                         <div class="dots">
                             <div class=dot></div>
-                            <div class="container">
-                                <div class="placeholder"></div>
-                                <div class="dash"></div>
+                            <div class=dash></div>
+                            <div class=dot></div>
+                            <div class=dash>
+                                <!-- <div id="designed">Designed by<br>Alexander Berson</div> -->
                             </div>
                             <div class=dot></div>
-                            <div class="container">
-                                <div class="placeholder"></div>
-                                <div class="dash"></div>
-                            </div>
-                            <div class=dot></div>
-                            <div class="container">
-                                <div class="placeholder"></div>
-                                <div class="dash"></div>
-                            </div>
+                            <div class=dash></div>
                             <div class=dot></div>
                         </div>
+
+                    </div>
+
+                    <!-- <div class="choice">
+                        <div class="boy"></div>
+                        <div class="girl"></div>
+                    </div> -->
+
                     </div>
                 </main>
             </div>

@@ -6,7 +6,8 @@ let size = 3;
 let depth = 1;
 let blue = 1;
 let pink = 2;
-let player = blue;
+let playerColor = blue;
+let player = playerColor;
 
 let turnInterval;   //
 let turn = 0;   //
@@ -16,9 +17,7 @@ let scores = [];    //
 let bluesW = 0; //
 let pinksW = 0; //
 
-const touchScreen = () => matchMedia('(hover: none)').matches;
-
-const showBoard = () => document.querySelector("body").style.opacity = 1;
+let cut = false;    //
 
 const changeColor = () => player == blue ? player = pink : player = blue;
 
@@ -70,9 +69,72 @@ const updateBoard = (dash, dashes, squares, color) => {
     return filled;
 }
 
-const aiTurn = (delay = 0) => {
+const freeDashes = (dashes) => {
 
-    // let dash
+    let seq = [];
+
+    for (let i = 0; i < dashes.length; i++) {
+
+        if (dashes[i] == 0) seq.push(i);
+    }
+
+    return seq;
+}
+
+const gameOver = () => {
+
+    console.log("GAME OVER");
+
+    document.querySelector('.board').classList.add("reset");
+
+    setTimeout(() => {
+        if (touchScreen()){
+            document.querySelector('.board').addEventListener("touchstart", newGame);
+        } else {
+            document.querySelector('.board').addEventListener("mousedown", newGame);
+        }
+    }, 500);
+}
+
+const newGame = () => {
+
+    console.log("NEW GAME");
+
+    document.querySelector('.board').classList.remove("reset");
+
+    if (touchScreen()){
+        document.querySelector('.board').removeEventListener("touchstart", newGame);
+    } else {
+        document.querySelector('.board').removeEventListener("mousedown", newGame);
+    }
+
+    playerColor = playerColor == blue ? pink : blue;
+    player = playerColor;
+
+    initBoard();
+
+    clearBoard();
+
+    if (playerColor == blue) {
+        setTimeout(enableTouch, 500);
+        return;
+    }   
+
+    setTimeout(() => {
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                aiTurn();
+            });
+        });
+    }, 1000);
+
+
+
+}
+
+const aiTurn = () => {
+
+    let dash
 
     depth = 1;
 
@@ -83,21 +145,34 @@ const aiTurn = (delay = 0) => {
             // dash = mcs(dashes, squares, startTime, timeLimit);
 
 
-    // if (player == blue) {
+    if (player == blue) {
 
-        // dash = mcts(dashes, squares);
+        // if (oneSide(dashes, squares)) {
+        //     console.log("MCTS");
+            dash = mcts(dashes, squares);
+        // } else {
+        //     console.log("MINIMAX");
+        //     [dash, _] = minimax(dashes, squares);
+        // }
+
+        // if (cut) console.log("CUT");    //
+
+        // cut = false;    //
+
 
         
-        let [dash, _] = minimax(dashes, squares, delay);
 
 
-    // } else {
+    } else {
 
-        // dash = mcs(dashes, squares);
+        dash = mcts(dashes, squares);
 
-    // }
 
-    console.log(dash);
+        // [dash, _] = minimax(dashes, squares);
+
+    }
+
+    // console.log(dash);
 
     if (dash == null) return;
 
@@ -117,7 +192,12 @@ const aiTurn = (delay = 0) => {
         //     setTimeout(rePlay, 2000);
         // }
 
-        setTimeout(aiTurn, 0, 500); //
+        if (win(squares)) {
+            setTimeout(gameOver, 1000); 
+        } else {
+            setTimeout(aiTurn, 1000); //
+        }
+
         return;
     }
     
@@ -128,6 +208,11 @@ const aiTurn = (delay = 0) => {
     //     initBoard();
     //     setTimeout(rePlay, 2000);
     // }
+
+    if (win(squares)) {
+        setTimeout(gameOver, 1000); 
+        return;
+    } 
 
     changeColor();
     setTimeout(enableTouch, 500);
@@ -145,11 +230,16 @@ const humanTurn = (e) => {
 
         if (!updateBoard(dash, dashes, squares, player)) {
 
+            if (win(squares)) {
+                setTimeout(gameOver, 1000); 
+                return;
+            } 
+
             changeColor();
 
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
-                    setTimeout(aiTurn, 0);
+                    setTimeout(aiTurn, 500);
                 });
             }); 
         
@@ -158,13 +248,21 @@ const humanTurn = (e) => {
 
         fillSquares(dash);
 
+        if (win(squares)) {
+            setTimeout(gameOver, 1000); 
+            return;
+        } 
+
         enableTouch();
     }
 }
 
 const rePlay = () => {
 
-    player = blue;
+    playerColor = playerColor == blue ? pink : blue;
+    player = playerColor;
+
+    // player = blue;
 
     clearBoard();
 
@@ -220,15 +318,18 @@ const init = () => {
 
     disableTapZoom();
     initBoard();
+    // showChoice();
     showBoard();
     enableTouch();
 
-    setTimeout(() => {
-        player = 2;
-        aiTurn();
-    }, 1000);
+    setTimeout(enableTouchChoice, 500);
 
-//    turnInterval = setInterval(aiTurn, 1000);
+    // setTimeout(() => {
+    //     player = pink;
+    //     aiTurn();
+    // }, 1000);
+
+//    turnInterval = setInterval(aiTurn, 1000); //
 }
 
 window.onload = () => {
