@@ -153,7 +153,7 @@ const mcts = (dashes, squares) => {
 
         let value = child.wins / child.plays;
 
-        console.log(child.move, value);
+        // console.log(child.move, value);
 
         if (value > bestValue) [bestValue, bestMove] = [value, child.move];
     }

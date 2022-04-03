@@ -1,4 +1,6 @@
-const threeSides = (dashes, squares, seq) => {
+const threeSides = (dashes, squares) => {
+
+    let seq = shuffle(Array.from({length: dashes.length}, (_, i) => i));
 
     for (let i = 0; i < dashes.length; i++) {
 
@@ -16,7 +18,9 @@ const threeSides = (dashes, squares, seq) => {
     return null;
 }
 
-const oneSides = (dashes, squares, seq) => {
+const oneSide = (dashes, squares) => {
+
+    let seq = shuffle(Array.from({length: dashes.length}, (_, i) => i));
 
     outer: for (let i = 0; i < dashes.length; i++) {
 
@@ -41,13 +45,13 @@ const simpleAI = (dashes, squares) => {
     // console.log(dashes);
     // console.log(squares);
 
-    let seq = shuffle(Array.from({length: dashes.length}, (_, i) => i));
+    // let seq = shuffle(Array.from({length: dashes.length}, (_, i) => i));
 
-    let dash = threeSides(dashes, squares, seq);
+    let dash = threeSides(dashes, squares);
 
     if (dash != null) return dash;
     
-    dash = oneSides(dashes, squares, seq);
+    dash = oneSide(dashes, squares);
 
     if (dash != null) return dash;   
     

@@ -6,8 +6,8 @@ let size = 3;
 let depth = 1;
 let blue = 1;
 let pink = 2;
-let playerColor = blue;
-let player = playerColor;
+let playerColor;
+let player;
 
 let turnInterval;   //
 let turn = 0;   //
@@ -115,7 +115,7 @@ const newGame = () => {
 
     clearBoard();
 
-    if (playerColor == blue) {
+    if (playerColor == localStorage.getItem("color")) {
         setTimeout(enableTouch, 500);
         return;
     }   
@@ -318,11 +318,19 @@ const init = () => {
 
     disableTapZoom();
     initBoard();
-    // showChoice();
-    showBoard();
-    enableTouch();
 
-    setTimeout(enableTouchChoice, 500);
+    if (localStorage.color) {
+
+        playerColor = localStorage.getItem("color");
+        player = playerColor;
+
+        showBoard();
+        enableTouch();
+    } else {
+        showChoice();
+
+        setTimeout(enableTouchChoice, 2000);
+    }
 
     // setTimeout(() => {
     //     player = pink;

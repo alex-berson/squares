@@ -20,8 +20,8 @@
 body {
     font-family: 'Roboto', serif;
     margin: 0px;
-    opacity: 0;
-    transition: opacity 2s ease;
+    /* opacity: 0; */
+    /* transition: opacity 2s ease; */
 }
 
 #outer {
@@ -49,9 +49,9 @@ h1 {
     font-size: 23.5vw;
     font-size: 24vw;
     margin-top: 0px;
-    /* display: none; */
-    /* opacity: 0; */
-    /* transition: opacity 2s ease; */
+    display: none;
+    opacity: 0;
+    transition: opacity 2s ease;
 
 }
 
@@ -69,9 +69,9 @@ span:nth-child(even) {
     width: var(--size);
     margin: auto;
     box-sizing: border-box;
-    /* display: none; */
-    /* opacity: 0; */
-    /* transition: opacity 2s ease; */
+    display: none;
+    opacity: 0;
+    transition: opacity 2s ease;
 
 }
 
@@ -245,43 +245,40 @@ span:nth-child(even) {
 
 .choice {
 
-    /* display: flex;
-    align-items: center;
-    justify-content: space-evenly; */
-
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center; 
     opacity: 0;
+    display: none;
     transition: opacity 1s ease-in-out;
 }
 
-.boy {
+.blue-button {
     background-color: lightskyblue;
     width:  calc(var(--size) / 16 * 3.5);
     height:  calc(var(--size) / 16 * 3.5);
-    border-radius: 50%;
+    border-radius: 20%;
     /* margin: auto; */
     position: relative; 
-
-
-
 }
 
-.girl {
+.pink-button {
     background-color: pink;
     width:  calc(var(--size) / 16 * 3.5);
     height:  calc(var(--size) / 16 * 3.5);
-    border-radius: 50%;
+    border-radius: 20%;
     /* margin: auto; */
     position: relative; 
     margin-left: 20vmin;
-
 }
 
-.boy:hover, .girl:hover {
+.blue-button:hover, .pink-button:hover {
     cursor: pointer;
+}
+
+.zoom {
+    animation: zooming 0.3s 2 linear forwards alternate;
 }
 
 @keyframes fill {
@@ -292,6 +289,15 @@ span:nth-child(even) {
 
     100% {
         opacity: 1;
+    }
+}
+
+@keyframes zooming {
+    0% {
+        transform: scale(1.0);
+    }
+    100% {
+        transform: scale(1.2);
     }
 }
 

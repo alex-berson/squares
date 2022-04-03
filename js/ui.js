@@ -1,10 +1,40 @@
 const touchScreen = () => matchMedia('(hover: none)').matches;
 
-const showBoard = () => document.querySelector("body").style.opacity = 1;
+// const showBoard = () => document.querySelector("body").style.opacity = 1;
+
+const showBoard = () => {
+
+    document.querySelector("h1").style.display = "block";    
+    document.querySelector(".board").style.display = "block";
+
+    setTimeout(() => {
+        document.querySelector("h1").style.opacity = 1;
+        document.querySelector(".board").style.opacity = 1;
+
+    }, 50);
+}
+
 
 const showChoice = () => {
-    
-    document.querySelector(".choice").style.opacity = 1;
+
+    document.querySelector(".choice").style.display = "flex";
+
+    setTimeout(() => {
+        document.querySelector(".choice").style.opacity = 1;
+    }, 50);
+
+    setTimeout(() => {
+        document.querySelector(".blue-button").classList.add("zoom");
+    }, 1000 + 50);
+
+    setTimeout(() => {
+        document.querySelector(".pink-button").classList.add("zoom");
+    }, 1000 + 500 + 50);
+
+    // setTimeout(() => {
+    //     document.querySelector(".blue-button").classList.remove("zoom");
+    //     document.querySelector(".pink-button").classList.remove("zoom");
+    // }, 1700 + 500);
 
 
 };
@@ -98,45 +128,67 @@ const clearBoard = () => {
     }, 500);
 }
 
-colorChoice = (e) => {
+const colorChoice = (e) => {
+
+    // let color;
 
     disableTouchChoice();
 
+    document.querySelector(".blue-button").classList.remove("zoom");
+    document.querySelector(".pink-button").classList.remove("zoom");
+
+    // if (localStorage.color) {
+    //     color = localStorage.getItem("color");
+    //     console.log(color);
+    // }
+
     let el = e.currentTarget;
 
-    if (el.classList.contains("boy")) {
 
-        console.log("BOY")
+    if (el.classList.contains("blue-button")) {
+        // console.log("BOY")
+        localStorage.setItem("color", blue);
     } else {
-        console.log("GIRL")
-
+        localStorage.setItem("color", pink);
+        // console.log("GIRL")
     }
 
-    document.querySelector(".choice").style.opacity = 0;
+    // if (localStorage.color) {
+    //     color = localStorage.getItem("color");
+    //     console.log(color);
+    // }
+
+    playerColor = localStorage.getItem("color");
+    player = playerColor;
 
     setTimeout(() => {
+        el.classList.add("zoom");
+    }, 50);
+
+    setTimeout(() => {
+        document.querySelector(".choice").style.opacity = 0;
+    }, 500);
+
+    setTimeout(() => {
+
+        el.classList.remove("zoom");
 
         document.querySelector(".choice").style.display = "none";
         document.querySelector("h1").style.display = "block";
         document.querySelector(".board").style.display = "block";
 
         setTimeout(() => {
-
             document.querySelector("h1").style.opacity = 1;
             document.querySelector(".board").style.opacity = 1;
 
         }, 500);
 
+        setTimeout(() => {
+            enableTouch();
+        }, 500 + 500);
 
 
-
-
-
-    }, 1000);
-
-    // console.log(el);
-
-
+    }, 1000 + 500);
 } 
 
 const disableTouch = () => {
@@ -162,7 +214,7 @@ const enableTouch = () => {
 }
 
 const disableTouchChoice = () => {
-    document.querySelectorAll('.boy, .girl').forEach((dash) => {
+    document.querySelectorAll('.blue-botton, .pink-button').forEach((dash) => {
         if (touchScreen()){
             dash.removeEventListener('touchstart', colorChoice);
         } else {
@@ -172,7 +224,7 @@ const disableTouchChoice = () => {
 }
 
 const enableTouchChoice = () => {
-    document.querySelectorAll('.boy, .girl').forEach((dash) => {
+    document.querySelectorAll('.blue-button, .pink-button').forEach((dash) => {
         if (touchScreen()){
             dash.addEventListener('touchstart', colorChoice);
         } else {
