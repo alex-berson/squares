@@ -87,9 +87,9 @@ const alphabeta = (dashes, squares, depth, alpha, beta, maximizingPlayer, startT
 const minimax = (dashes, squares) => {
 
     let startTime = new Date();
-    let timeLimit = 500;
+    let timeLimit = 1000;
     let dash, score, lastDash, lastScore;
-    depth = 1;
+    let depth = 1;
 
     do {
         scores = [];
@@ -116,5 +116,5 @@ const minimax = (dashes, squares) => {
 
     // depth -= 2;
 
-    return [lastDash, lastScore];
+    return [[lastDash, depth - 1], lastScore];
 }

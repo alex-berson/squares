@@ -1,7 +1,5 @@
 // let nodes; //
 
-const winner = (squares) => squares.blue > squares.pink ? blue : pink;
-
 const createNode = (node, color, move) => {
 
     let [newDashes, newSquares] = copyBoard(node.dashes, node.squares);
@@ -118,7 +116,7 @@ const backprapogation = (node, color) => {
 const mcts = (dashes, squares) => {
 
     let startTime = new Date();
-    let timeLimit = 500;
+    let timeLimit = 1000;
 
     let color = player;
 
@@ -144,7 +142,7 @@ const mcts = (dashes, squares) => {
 
     } while (!timeOver(startTime, timeLimit));
 
-    console.log(i, color);
+    // console.log(i, color);
 
     let bestMove;
     let bestValue = -Infinity;
@@ -158,5 +156,5 @@ const mcts = (dashes, squares) => {
         if (value > bestValue) [bestValue, bestMove] = [value, child.move];
     }
 
-    return bestMove;
+    return [bestMove, i];
 }
