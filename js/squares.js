@@ -19,9 +19,12 @@ const gameOver = () => {
 
     console.log("GAME OVER");
 
-    document.querySelector('.board').classList.add("reset");
+    showWinner();
 
     setTimeout(() => {
+
+        document.querySelector('.board').classList.add("reset");
+
         if (touchScreen()){
             document.querySelector('.board').addEventListener("touchstart", newGame);
         } else {
@@ -72,7 +75,7 @@ const rePlay = () => {
 
     clearBoard();
 
-    setTimeout(() => {turnInterval = setInterval(aiTurn, 1500)}, 1000);
+    setTimeout(() => {turnInterval = setInterval(aiTurn, 1500)}, 0);
 }
 
 const aiTurn = () => {
@@ -87,9 +90,10 @@ const aiTurn = () => {
 
     worker.addEventListener("message", e => {
 
+        // console.log(e.data);
+
         let [dash, i] = e.data;
 
-        // console.log(e.data);
 
         // alert(i);
 
@@ -112,7 +116,7 @@ const aiTurn = () => {
             // }
 
             if (win(squares)) {
-                setTimeout(gameOver, 1000); 
+                setTimeout(gameOver, 500); 
             } else {
                 setTimeout(aiTurn, 500); //
             }
@@ -134,7 +138,7 @@ const aiTurn = () => {
         } 
 
         changeColor();
-        setTimeout(enableTouch, 500);
+        setTimeout(enableTouch, 250);
     });
 } 
 
@@ -153,7 +157,7 @@ const humanTurn = (e) => {
         if (!updateBoard(dash, dashes, squares, player)) {
 
             if (win(squares)) {
-                setTimeout(gameOver, 1000); 
+                setTimeout(gameOver, 500); 
                 return;
             } 
 
@@ -173,7 +177,7 @@ const humanTurn = (e) => {
         fillSquares(dash);
 
         if (win(squares)) {
-            setTimeout(gameOver, 1000); 
+            setTimeout(gameOver, 500); 
             return;
         } 
 

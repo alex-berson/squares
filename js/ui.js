@@ -14,7 +14,6 @@ const showBoard = () => {
     }, 50);
 }
 
-
 const showChoice = () => {
 
     document.querySelector(".choice").style.display = "flex";
@@ -110,7 +109,7 @@ const clearBoard = () => {
         box.style.transition = "background-color 0.5s linear";  
     });
 
-    document.querySelectorAll('.dash, .dash-v, .box').forEach((element) => {
+    document.querySelectorAll('.dash, .dash-v, .box, .dot').forEach((element) => {
         element.classList.remove("blue");
         element.classList.remove("pink");
     });
@@ -189,6 +188,12 @@ const colorChoice = (e) => {
 
 
     }, 1000 + 500);
+} 
+
+const showWinner = () => {
+    document.querySelectorAll('.dot').forEach((dot) => {
+        winner(squares) == blue ? dot.classList.add("blue") : dot.classList.add("pink");
+    });
 } 
 
 const disableTouch = () => {

@@ -91,6 +91,9 @@ span:nth-child(even) {
     border-radius: 50%;
     width: calc(var(--size) / 16);
     height: calc(var(--size) / 16);
+
+    transition: background-color 0.5s linear;
+
 }
 
 /* .container {
@@ -233,8 +236,6 @@ span:nth-child(even) {
     background-color: lightskyblue;
     /* opacity: 1; */
     /* transition: opacity 0.5s linear; */
-
-
 }
 
 .pink {
@@ -242,6 +243,14 @@ span:nth-child(even) {
     /* opacity: 1; */
     /* transition: background-color 0.5s linear; */
 }
+
+/* .blue:hover {
+    cursor: default;
+}
+
+.pink:hover {
+    cursor: default;
+} */
 
 .choice {
 

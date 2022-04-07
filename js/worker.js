@@ -13,7 +13,8 @@ addEventListener("message", e => {
 
     dashSquares = findAjacentSquares();
 
-    let dash = player == pink ? mcts(dashes, squares) : minimax(dashes, squares)[0];
+    let dash = player == blue ? minimax(dashes, squares)[0] : mcts(dashes, squares);
+
 
     // let dash = mcts(dashes, squares);
 
