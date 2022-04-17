@@ -10,6 +10,19 @@
 }
 
 :root {
+
+    --blue: lightskyblue;
+    --pink: pink;
+
+    /* --blue: deepskyblue;
+    --pink: hotpink;
+
+    --blue: skyblue;
+    --pink: #ffa6c9; */
+
+    --color1: var(--blue);
+    --color2: var(--pink);
+
     --size: 86vmin;
 }
 
@@ -43,6 +56,10 @@ body {
     margin-right: auto;
 }
 
+.header {
+    position: relative
+}
+
 h1 {
     color: black;
     text-align: center;
@@ -55,13 +72,71 @@ h1 {
 
 }
 
-span:nth-child(odd) {
-    color: lightskyblue;
+#designed2 {
+
+    position: fixed;
+    /* width:50%; */
+
+    font-size: 3.5vw;
+
+    color: silver;
+
+
+
+    margin: auto;
+    /* height:300px; */
+    /* margin-left:-25%; */
+    /* background:#063; */
+    bottom: 5px;
+    left: 50%;
+    transform: translate(calc(-50%), 0);
+
+    display: none;
+    transition: opacity 2s ease;
+    opacity: 0;
+
+
 }
 
-span:nth-child(even) {
-    color: pink;
+#designed {
+    position: absolute;
+    font-size: 3.5vw;
+    text-align: center;
+    left: calc(50% + 1.3em);
+    transform: translate(calc(-50% + 1.3em), 0);
+    top: 26.5vw;
+    display: none;
+    opacity: 0;
+    transition: opacity 2s ease;
+    white-space: nowrap;
 }
+
+h1 span:nth-child(odd) {
+    /* color: var(--blue); */
+    color: var(--color1);
+
+}
+
+h1 span:nth-child(even) {
+    /* color: var(--pink); */
+    color: var(--color2);
+
+}
+
+#designed span {
+    color: var(--blue);
+
+}
+
+/* #designed span:nth-child(odd) {
+    color: var(--color1);
+
+}
+
+#designed span:nth-child(even) {
+    color: var(--color2);
+
+} */
 
 .board {
     /* background-color: blanchedalmond; */
@@ -224,22 +299,22 @@ span:nth-child(even) {
     cursor: pointer;
 }
 
-#designed {
+/* #designed {
     line-height: 100%;
     font-size: 7px;
     font-weight: bold;
     text-align: center;
     color: white;
-}
+} */
 
 .blue {
-    background-color: lightskyblue;
+    background-color: var(--blue);
     /* opacity: 1; */
     /* transition: opacity 0.5s linear; */
 }
 
 .pink {
-    background-color: pink;
+    background-color: var(--pink);
     /* opacity: 1; */
     /* transition: background-color 0.5s linear; */
 }
@@ -264,7 +339,7 @@ span:nth-child(even) {
 }
 
 .blue-button {
-    background-color: lightskyblue;
+    background-color: var(--blue);
     width:  calc(var(--size) / 16 * 3.5);
     height:  calc(var(--size) / 16 * 3.5);
     border-radius: 20%;
@@ -273,7 +348,7 @@ span:nth-child(even) {
 }
 
 .pink-button {
-    background-color: pink;
+    background-color: var(--pink);
     width:  calc(var(--size) / 16 * 3.5);
     height:  calc(var(--size) / 16 * 3.5);
     border-radius: 20%;
@@ -312,8 +387,16 @@ span:nth-child(even) {
 
 
 @media (orientation: landscape) and (max-height: 460px) {
-    h1{
+    .header  {
         display: none;
+    }
+
+    #info {
+        display: none;
+    }
+
+    .board {
+        margin-top: 20px;
     }
 }
 
@@ -325,13 +408,24 @@ span:nth-child(even) {
 
     h1 {
         font-size: 7em;
+        /* margin-bottom: -9.2em; */
+        /* margin-top: 7em; */
+
+
     } 
 
     #designed {
-        font-size: 0.5em;
-        font-weight: bold;
+        font-size: 1em;
         text-align: center;
+        top: 7.7em;
+       
+       
+
     }  
+
+    #designed2 {
+        font-size: 1em;
+    }
 }
 
 .noselect {

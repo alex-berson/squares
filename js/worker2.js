@@ -31,19 +31,22 @@ addEventListener("message", e => {
 
         // console.log("MINIMAX");
 
-        // dash = minimax(dashes, squares)[0];
+        dash = minimax(dashes, squares)[0];
+
+        // dash = mcts(dashes, squares);
+
 
     // } else {
 
-        // dash = oneSide(dashes, squares);
+    //     dash = oneSide(dashes, squares);
 
-        // if (dash != null) {
-            // console.log("MCTS");
-            dash = mcts(dashes, squares);
-        // } else {
-            // console.log("MINIMAX");
-            // dash = minimax(dashes, squares)[0];
-        // }
+    //     if (dash != null) {
+    //         // console.log("MCTS");
+    //         dash = mcts(dashes, squares);
+    //     } else {
+    //         // console.log("MINIMAX");
+    //         dash = minimax(dashes, squares)[0];
+    //     }
     // }
 
     // console.log(dash);

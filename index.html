@@ -11,11 +11,23 @@
     <meta name="apple-itunes-app" content="">
     <meta name="google" content="notranslate">
 
+    <meta name="apple-itunes-app" content="app-id="> 
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Squares">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="images/icons/favicon.ico">
+    <link rel="mask-icon" href="images/icons/safari-pinned-tab.svg" color="#5bbad5">  
+    <link rel="manifest" href="manifest.json">
+
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    
     <script src="js/squares.js" defer></script>
     <script src="js/ui.js" defer></script>
-    <script src="js/simpleai.js" defer></script>
     <script src="js/utils.js" defer></script>
 </head>
 <body class="noselect">
@@ -23,9 +35,12 @@
         <div id="middle">
             <div id="inner">
                 <header>
-                    <h1>
-                        <span id="char1">S</span><span id="char2">q</span><span id="char3">u</span><span id="char4">a</span><span id="char5">r</span><span id="char6">e</span><span id="char7">s</span>
-                    </h1>
+                    <div class="header">
+                        <h1>
+                            <span>S</span><span>q</span><span>u</span><span>a</span><span>r</span><span>e</span><span>s</span>
+                        </h1>
+                        <div id="designed"><span>D</span><span>e</span><span>s</span><span>i</span><span>g</span><span>n</span><span>e</span><span>d</span><span> </span><span>b</span><span>y</span><span> </span><span>A</span><span>l</span><span>e</span><span>x</span><span>a</span><span>n</span><span>d</span><span>e</span><span>r</span><span> </span><span>B</span><span>e</span><span>r</span><span>s</span><span>o</span><span>n</span></div>
+                    </div>
                 </header>
                 <main>
                     <div class="board">
@@ -88,7 +103,6 @@
                             <div class=dash></div>
                             <div class=dot></div>
                             <div class=dash>
-                                <!-- <div id="designed">Designed by<br>Alexander Berson</div> -->
                             </div>
                             <div class=dot></div>
                             <div class=dash></div>
@@ -101,6 +115,8 @@
                         <div class="blue-button"></div>
                         <div class="pink-button"></div>
                     </div>
+
+                    <!-- <div id="designed2">Designed by Alexander Berson</div> -->
 
                     </div>
                 </main>

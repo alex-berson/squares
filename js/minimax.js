@@ -37,14 +37,18 @@ const alphabeta = (dashes, squares, depth, alpha, beta, maximizingPlayer, startT
         for (let dash of freeSeq) {
 
             let [newDashes, newSquares] = copyBoard(dashes, squares);
+           
+            let maximizingPlayer = updateBoard(dash, newDashes, newSquares, player);
 
-            if (updateBoard(dash, newDashes, newSquares, player)) {
-                isMax = true;
-            } else {
-                isMax = false;
-            }
+            // if (updateBoard(dash, newDashes, newSquares, player)) {
+            //     isMax = true;
+            // } else {
+            //     isMax = false;
+            // }
+
+            // if (maximizer != isMax) console.log("!=");
     
-            [_, score] = alphabeta(newDashes, newSquares, depth - 1, alpha, beta, isMax, startTime, timeLimit, false);
+            [_, score] = alphabeta(newDashes, newSquares, depth - 1, alpha, beta, maximizingPlayer, startTime, timeLimit, false);
 
             if (score > bestScore) [bestScore, bestDash] = [score, dash];
 
@@ -64,14 +68,18 @@ const alphabeta = (dashes, squares, depth, alpha, beta, maximizingPlayer, startT
         for (let dash of freeSeq) {
 
             let [newDashes, newSquares] = copyBoard(dashes, squares);
-    
-            if (updateBoard(dash, newDashes, newSquares, opponent)) {
-                isMax = false;
-            } else {
-                isMax = true;
-            }    
 
-            [_, score] = alphabeta(newDashes, newSquares, depth - 1, alpha, beta, isMax, startTime, timeLimit, false);
+            let maximizingPlayer = !updateBoard(dash, newDashes, newSquares, opponent);
+    
+            // if (updateBoard(dash, newDashes, newSquares, opponent)) {
+            //     isMax = false;
+            // } else {
+            //     isMax = true;
+            // }    
+
+            // if (maximizer != isMax) console.log("!=");
+
+            [_, score] = alphabeta(newDashes, newSquares, depth - 1, alpha, beta, maximizingPlayer, startTime, timeLimit, false);
     
             if (score < bestScore) [bestScore, bestDash] = [score, dash];
 
@@ -87,7 +95,7 @@ const alphabeta = (dashes, squares, depth, alpha, beta, maximizingPlayer, startT
 const minimax = (dashes, squares) => {
 
     let startTime = new Date();
-    let timeLimit = 1000;
+    let timeLimit = 980;
     let dash, score, lastDash, lastScore;
     let depth = 1;
 

@@ -30,7 +30,7 @@ const oneSide = (dashes, squares) => {
 
         for (let square of dashSquares[dash]) {
 
-            if (squares[square] == 2) continue outer;
+            if (squares[square] == 2 || squares[square] == 3) continue outer;
 
         }
 

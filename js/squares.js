@@ -2,8 +2,7 @@ let dashes = [];
 let squares = [];
 let dashSquares = [];
 
-let playerColor;
-let player;
+let playerColor, player;
 
 let turnInterval;   //
 let turn = 0;   //
@@ -14,6 +13,8 @@ let bluesW = 0; //
 let pinksW = 0; //
 
 let cut = false;    //
+
+const storeColor = (color) =>  localStorage.setItem("color", color);
 
 const gameOver = () => {
 
@@ -80,66 +81,244 @@ const rePlay = () => {
 
 const aiTurn = () => {
 
-    // let dash
+    let dash, i;
 
     // depth = 1;
 
-    const worker = new Worker("./js/worker.js");
+    // const worker = new Worker("./js/worker.js");
 
-    worker.postMessage([dashes, squares, player]);
+    // const worker = new Worker("./js/worker.js");
 
-    worker.addEventListener("message", e => {
+    // worker.postMessage([dashes, squares, player]);
 
-        // console.log(e.data);
+    
+    // const worker2 = new Worker("./js/worker.js");
 
-        let [dash, i] = e.data;
+    // worker2.postMessage([dashes, squares, player]);
+
+    // worker2.addEventListener("message", e => {
+
+    // });
+
+    let mcts = true;
+
+    if (player == blue) {
 
 
-        // alert(i);
+        const worker2 = new Worker("./js/worker2.js");
 
-        if (dash == null) return;
+        worker2.postMessage([dashes, squares, player]);
 
-        let dashEl = getDashEl(dash);
+        worker2.addEventListener("message", e => {
+             
+            // console.log("WORKER2");
 
-        select(dashEl);
+            [dash, i] = e.data;
 
-        if (updateBoard(dash, dashes, squares, player)) {
+            // console.log(i, freeDashes(dashes).length, player);
 
-            fillSquares(dash);
+            if (freeDashes(dashes).length <= i) mcts = false;
 
+        });
+
+        const worker = new Worker("./js/worker.js");
+
+        worker.postMessage([dashes, squares, player]);
+
+        worker.addEventListener("message", e => {
+
+            // console.log("WORKER1");
+
+            // console.log(e.data);
+
+            // console.log(dash);
+
+            // while (dash == undefined) {};
+
+            if (mcts) {
+                [dash, i] = e.data;
+            } else {
+                // console.log("MINIMAX");
+            }
+    
+            // let [dash, i] = e.data;
+    
+    
+            // alert(i);
+    
+            if (dash == null) return;
+    
+            let dashEl = getDashEl(dash);
+    
+            select(dashEl);
+    
+            if (updateBoard(dash, dashes, squares, player)) {
+    
+                fillSquares(dash);
+    
+                // if (win(squares)) {
+                //     squares.blue - squares.pink > 0 ? bluesW++ : pinksW++; //
+                //     console.log(turn++, bluesW, pinksW);
+                //     clearInterval(turnInterval);
+                //     // if (turn % 100 == 0) alert(String(turn) + " " + String(bluesW) + " " + String(pinksW));
+                //     // document.querySelector('h1').innerText = String(bluesW) + " " + String(pinksW);
+                //     initBoard();
+                //     setTimeout(rePlay, 2000);
+                // }
+    
+                if (win(squares)) {
+                    setTimeout(gameOver, 500); 
+                } else {
+                    setTimeout(aiTurn, 500); //
+                }
+    
+                return;
+            }
+            
             // if (win(squares)) {
             //     squares.blue - squares.pink > 0 ? bluesW++ : pinksW++; //
-            //     console.log(turn++, bluesW, pinksW);
+            //     console.log(turn++, pinksW, pinksW);
             //     clearInterval(turnInterval);
+            //     // if ((turn - 1) % 100 == 0) alert(String(turn) + " " + String(bluesW) + " " + String(pinksW));
+            //     // document.querySelector('h1').innerText = String(bluesW) + " " + String(pinksW);
             //     initBoard();
             //     setTimeout(rePlay, 2000);
             // }
-
+    
             if (win(squares)) {
-                setTimeout(gameOver, 500); 
-            } else {
-                setTimeout(aiTurn, 500); //
+                setTimeout(gameOver, 1000); 
+                return;
+            } 
+    
+            changeColor();
+            setTimeout(enableTouch, 250);
+           
+        });
+
+    } else {
+
+        const worker = new Worker("./js/worker2.js");
+
+        worker.postMessage([dashes, squares, player]);
+
+        worker.addEventListener("message", e => {
+
+            // console.log(e.data);
+    
+            let [dash, i] = e.data;
+
+            // console.log(i, player);
+
+    
+    
+            // alert(i);
+    
+            if (dash == null) return;
+    
+            let dashEl = getDashEl(dash);
+    
+            select(dashEl);
+    
+            if (updateBoard(dash, dashes, squares, player)) {
+    
+                fillSquares(dash);
+    
+                // if (win(squares)) {
+                //     squares.blue - squares.pink > 0 ? bluesW++ : pinksW++; //
+                //     console.log(turn++, bluesW, pinksW);
+                //     clearInterval(turnInterval);
+                //     // if (turn % 100 == 0) alert(String(turn) + " " + String(bluesW) + " " + String(pinksW));
+                //     // document.querySelector('h1').innerText = String(bluesW) + " " + String(pinksW);
+                //     initBoard();
+                //     setTimeout(rePlay, 2000);
+                // }
+    
+                if (win(squares)) {
+                    setTimeout(gameOver, 500); 
+                } else {
+                    setTimeout(aiTurn, 500); //
+                }
+    
+                return;
             }
+            
+            // if (win(squares)) {
+            //     squares.blue - squares.pink > 0 ? bluesW++ : pinksW++; //
+            //     console.log(turn++, pinksW, pinksW);
+            //     clearInterval(turnInterval);
+            //     // if ((turn - 1) % 100 == 0) alert(String(turn) + " " + String(bluesW) + " " + String(pinksW));
+            //     // document.querySelector('h1').innerText = String(bluesW) + " " + String(pinksW);
+            //     initBoard();
+            //     setTimeout(rePlay, 2000);
+            // }
+    
+            if (win(squares)) {
+                setTimeout(gameOver, 1000); 
+                return;
+            } 
+    
+            changeColor();
+            setTimeout(enableTouch, 250);
+        });
 
-            return;
-        }
+
+    }
+
+    // worker.addEventListener("message", e => {
+
+
+    //     // console.log(e.data);
+
+    //     let [dash, i] = e.data;
+
+
+    //     // alert(i);
+
+    //     if (dash == null) return;
+
+    //     let dashEl = getDashEl(dash);
+
+    //     select(dashEl);
+
+    //     if (updateBoard(dash, dashes, squares, player)) {
+
+    //         fillSquares(dash);
+
+    //         if (win(squares)) {
+    //             squares.blue - squares.pink > 0 ? bluesW++ : pinksW++; //
+    //             console.log(turn++, bluesW, pinksW);
+    //             clearInterval(turnInterval);
+    //             if (turn % 100 == 0) alert(String(turn) + " " + String(bluesW) + " " + String(pinksW));
+    //             initBoard();
+    //             setTimeout(rePlay, 2000);
+    //         }
+
+    //         if (win(squares)) {
+    //             setTimeout(gameOver, 500); 
+    //         } else {
+    //             // setTimeout(aiTurn, 500); //
+    //         }
+
+    //         return;
+    //     }
         
-        // if (win(squares)) {
-        //     squares.blue - squares.pink > 0 ? bluesW++ : pinksW++; //
-        //     console.log(turn++, pinksW, pinksW);
-        //     clearInterval(turnInterval);
-        //     initBoard();
-        //     setTimeout(rePlay, 2000);
-        // }
+    //     if (win(squares)) {
+    //         squares.blue - squares.pink > 0 ? bluesW++ : pinksW++; //
+    //         console.log(turn++, pinksW, pinksW);
+    //         clearInterval(turnInterval);
+    //         if ((turn - 1) % 100 == 0) alert(String(turn) + " " + String(bluesW) + " " + String(pinksW));
+    //         initBoard();
+    //         setTimeout(rePlay, 2000);
+    //     }
 
-        if (win(squares)) {
-            setTimeout(gameOver, 1000); 
-            return;
-        } 
+    //     if (win(squares)) {
+    //         setTimeout(gameOver, 1000); 
+    //         return;
+    //     } 
 
-        changeColor();
-        setTimeout(enableTouch, 250);
-    });
+    //     changeColor();
+    //     setTimeout(enableTouch, 250);
+    // });
 } 
 
 const humanTurn = (e) => {
@@ -213,23 +392,41 @@ const initBoard = () => {
     // squares[8] = 2;
 }
 
-const init = () => {
+const setColor = () => {
+    playerColor = parseInt(localStorage.getItem("color"));
+    player = playerColor;
+}
 
-    disableTapZoom();
-    initBoard();
+const checkColor = () => {
 
     if (localStorage.color) {
-
-        playerColor = parseInt(localStorage.getItem("color"));
-        player = playerColor;
-
+        setColor();
         showBoard();
         enableTouch();
     } else {
         showChoice();
-
         setTimeout(enableTouchChoice, 2000);
     }
+}
+
+const init = () => {
+
+    disableTapZoom();
+    initBoard();
+    checkColor();
+
+    // if (localStorage.color) {
+
+    //     playerColor = parseInt(localStorage.getItem("color"));
+    //     player = playerColor;
+
+    //     showBoard();
+    //     enableTouch();
+    // } else {
+    //     showChoice();
+
+    //     setTimeout(enableTouchChoice, 2000);
+    // }
 
     // setTimeout(() => {
     //     player = pink;

@@ -2,13 +2,27 @@ const touchScreen = () => matchMedia('(hover: none)').matches;
 
 // const showBoard = () => document.querySelector("body").style.opacity = 1;
 
+
+const setHeaderColors = (color) => {
+
+    if (color == blue) {
+        document.documentElement.style.setProperty('--color1', 'var(--blue)');
+        document.documentElement.style.setProperty('--color2', 'var(--pink)');
+    } else {
+        document.documentElement.style.setProperty('--color1', 'var(--pink)');
+        document.documentElement.style.setProperty('--color2', 'var(--blue)');
+    }
+}
+
 const showBoard = () => {
 
     document.querySelector("h1").style.display = "block";    
+    document.querySelector("#designed").style.display = "inline";    
     document.querySelector(".board").style.display = "block";
 
     setTimeout(() => {
         document.querySelector("h1").style.opacity = 1;
+        document.querySelector("#designed").style.opacity = 1;
         document.querySelector(".board").style.opacity = 1;
 
     }, 50);
@@ -146,9 +160,14 @@ const colorChoice = (e) => {
 
     if (el.classList.contains("blue-button")) {
         // console.log("BOY")
-        localStorage.setItem("color", blue);
+        storeColor(blue);
+        setHeaderColors(blue);
+
+        // localStorage.setItem("color", blue);
     } else {
-        localStorage.setItem("color", pink);
+        storeColor(pink);
+        setHeaderColors(pink);
+        // localStorage.setItem("color", pink);
         // console.log("GIRL")
     }
 
@@ -157,8 +176,10 @@ const colorChoice = (e) => {
     //     console.log(color);
     // }
 
-    playerColor = localStorage.getItem("color");
-    player = playerColor;
+    setColor();
+
+    // playerColor = localStorage.getItem("color");
+    // player = playerColor;
 
     setTimeout(() => {
         el.classList.add("zoom");
@@ -174,10 +195,12 @@ const colorChoice = (e) => {
 
         document.querySelector(".choice").style.display = "none";
         document.querySelector("h1").style.display = "block";
+        document.querySelector("#designed").style.display = "inline";    
         document.querySelector(".board").style.display = "block";
 
         setTimeout(() => {
             document.querySelector("h1").style.opacity = 1;
+            document.querySelector("#designed").style.opacity = 1;
             document.querySelector(".board").style.opacity = 1;
 
         }, 500);
