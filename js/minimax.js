@@ -95,7 +95,7 @@ const alphabeta = (dashes, squares, depth, alpha, beta, maximizingPlayer, startT
 const minimax = (dashes, squares) => {
 
     let startTime = new Date();
-    let timeLimit = 980;
+    let timeLimit = 1000;
     let dash, score, lastDash, lastScore;
     let depth = 1;
 

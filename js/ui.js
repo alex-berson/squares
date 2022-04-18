@@ -1,3 +1,5 @@
+let blueTimeout, pinkTimeout;
+
 const touchScreen = () => matchMedia('(hover: none)').matches;
 
 // const showBoard = () => document.querySelector("body").style.opacity = 1;
@@ -36,13 +38,13 @@ const showChoice = () => {
         document.querySelector(".choice").style.opacity = 1;
     }, 50);
 
-    setTimeout(() => {
+    blueTimeout = setTimeout(() => {
         document.querySelector(".blue-button").classList.add("zoom");
     }, 1000 + 50);
 
-    setTimeout(() => {
+    pinkTimeout = setTimeout(() => {
         document.querySelector(".pink-button").classList.add("zoom");
-    }, 1000 + 500 + 50);
+    }, 1000 + 700 + 50);
 
     // setTimeout(() => {
     //     document.querySelector(".blue-button").classList.remove("zoom");
@@ -146,6 +148,9 @@ const colorChoice = (e) => {
     // let color;
 
     disableTouchChoice();
+
+    clearTimeout(blueTimeout);
+    clearTimeout(pinkTimeout);
 
     document.querySelector(".blue-button").classList.remove("zoom");
     document.querySelector(".pink-button").classList.remove("zoom");
