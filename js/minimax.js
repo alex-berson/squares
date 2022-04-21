@@ -12,13 +12,13 @@ const evaluation = (squares) => {
         return squares.pink - squares.blue;
 }
 
-const alphabeta = (dashes, squares, depth, alpha, beta, maximizingPlayer, startTime, timeLimit, first) => {
+const alphabeta = (dashes, squares, depth, alpha, beta, maximizingPlayer, startTime, timeLimit, firstLevel) => {
 
     // let newDashes, newSquares;
     let bestScore, isMax;
     let freeSeq = freeDashes(dashes);
 
-    if (first) freeSeq = shuffle(freeDashes(dashes));
+    if (firstLevel) freeSeq = shuffle(freeDashes(dashes));
 
     let opponent = player == blue ? pink : blue;
     let bestDash = freeSeq[Math.floor(Math.random() * freeSeq.length)];
@@ -92,30 +92,34 @@ const alphabeta = (dashes, squares, depth, alpha, beta, maximizingPlayer, startT
     }
 }
 
-const minimax = (dashes, squares) => {
+const minimax = (dashes, squares, timeLimit) => {
 
     let startTime = new Date();
-    let timeLimit = 1000;
+    // let timeLimit = 1000;
     let dash, score, lastDash, lastScore;
-    let depth = 1;
+    let depth = 4;
 
     do {
-        scores = [];
+        // scores = [];
 
         [dash, score] = alphabeta(dashes, squares, depth, -Infinity, Infinity, true, startTime, timeLimit, true);
 
-        if (score != null) [lastDash, lastScore] = [dash, score];
+        // console.log(score);
+
+        if (timeOver(startTime, timeLimit)) break;
+
+        [lastDash, lastScore] = [dash, score];
 
         depth++;
 
-    } while (!timeOver(startTime, timeLimit) && depth <= freeDashes(dashes).length);
+    } while (depth <= freeDashes(dashes).length);
 
     do {} while (!timeOver(startTime, timeLimit));
 
 
     // await new Promise(r => setTimeout(r, timeLimit - (new Date() - startTime)));
 
-    // console.log("depth", depth - 1);
+    console.log("depth: ", depth - 1, "time:", timeLimit);
 
     // alert(depth - 1);
 
@@ -124,5 +128,5 @@ const minimax = (dashes, squares) => {
 
     // depth -= 2;
 
-    return [[lastDash, depth - 1], lastScore];
+    return [lastDash, depth - 1];
 }

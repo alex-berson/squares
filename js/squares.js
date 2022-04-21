@@ -14,6 +14,12 @@ let pinksW = 0; //
 
 let cut = false;    //
 
+let worker1, worker2, worker3, worker4, worker5, worker6, worker7;
+
+// console.log(worker1, worker4);
+
+
+
 const storeColor = (color) =>  localStorage.setItem("color", color);
 
 const gameOver = () => {
@@ -58,13 +64,13 @@ const newGame = () => {
         return;
     }   
 
-    // setTimeout(() => {
-        // requestAnimationFrame(() => {
-            // requestAnimationFrame(() => {
+    setTimeout(() => {
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
                 aiTurn();
-            // });
-        // });
-    // }, 1000);
+            });
+        });
+    }, 500);
 }
 
 const rePlay = () => {
@@ -79,8 +85,92 @@ const rePlay = () => {
     setTimeout(() => {turnInterval = setInterval(aiTurn, 1500)}, 0);
 }
 
-
 const aiTurn = () => {
+
+    let dash
+
+    depth = 1;
+
+    // let dash = randomAI(dashes);
+
+    // let dash = simpleAI(dashes, squares);
+
+            // dash = mcs(dashes, squares, startTime, timeLimit);
+
+
+    if (player == pink) {
+
+        // if (oneSide(dashes, squares)) {
+        //     console.log("MCTS");
+        [dash, _] = minimax(dashes, squares, 500);
+        // } else {
+        //     console.log("MINIMAX");
+        //     [dash, _] = minimax(dashes, squares);
+        // }
+
+        // if (cut) console.log("CUT");    //
+
+        // cut = false;    //
+
+
+        
+
+
+    } else {
+
+        // dash = mcts(dashes, squares);
+
+
+        [dash, _] = minimax(dashes, squares, 500);
+    }
+
+    // console.log(dash);
+
+    if (dash == null) return;
+
+    let dashEl = getDashEl(dash);
+
+    select(dashEl);
+
+    if (updateBoard(dash, dashes, squares, player)) {
+
+        fillSquares(dash);
+
+        // if (win(squares)) {
+        //     squares.blue - squares.pink > 0 ? bluesW++ : pinksW++; //
+        //     console.log(turn++, bluesW, pinksW);
+        //     clearInterval(turnInterval);
+        //     initBoard();
+        //     setTimeout(rePlay, 2000);
+        // }
+
+        if (win(squares)) {
+            setTimeout(gameOver, 500); 
+        } else {
+            setTimeout(aiTurn, 1000); //
+        }
+
+        return;
+    }
+    
+    // if (win(squares)) {
+    //     squares.blue - squares.pink > 0 ? bluesW++ : pinksW++; //
+    //     console.log(turn++, pinksW, pinksW);
+    //     clearInterval(turnInterval);
+    //     initBoard();
+    //     setTimeout(rePlay, 2000);
+    // }
+
+    if (win(squares)) {
+        setTimeout(gameOver, 500); 
+        return;
+    } 
+
+    changeColor();
+    setTimeout(enableTouch, 250);
+} 
+
+const aiTurn2 = () => {
 
     // let dash, i;
 
@@ -88,93 +178,15 @@ const aiTurn = () => {
 
     let counter = 0;
 
-    if (player == pink) {
-
-        const worker2 = new Worker("./js/worker2.js");
-
-        worker2.postMessage([dashes, squares, player]);
-
-        worker2.addEventListener("message", e => {
-             
-            console.log("WORKER2");
-
-            let [dash, i] = e.data;
-
-            // console.log(dash, i);
-
-            move.minimax = dash;
-            move.end = freeDashes(dashes).length <= i;
-            
-            counter++;
-
-            if (counter == 2) makeMove();
-
-            // console.log(i, freeDashes(dashes).length, player);
-
-            // if (freeDashes(dashes).length <= i) mcts = false;
-
-        });
-
-        const worker = new Worker("./js/worker.js");
-
-        worker.postMessage([dashes, squares, player]);
-
-        worker.addEventListener("message", e => {
-
-            console.log("WORKER1");
-
-            // console.log(e.data);
-
-            // console.log(dash);
-
-            // while (dash == undefined) {};
-
-            let [dash, i] = e.data;
-
-            move.mcts = dash;
-
-            counter++;
-
-            if (counter == 2) makeMove();            
-           
-        });
-
-    // console.log(webWorkers());
-
-    
-
-    } else {
-
-        const worker = new Worker("./js/worker.js");
-
-        worker.postMessage([dashes, squares, player]);
-
-        worker.addEventListener("message", e => {
-
-            // console.log(e.data);
-    
-            let [dash, i] = e.data;
-
-            // console.log(i, player);
-
-    
-    
-            // alert(i);
-    
-           move.minimax = dash;
-           move.end = true;
-        });
-
-        // console.log("END");
-    }
-
     const makeMove = () => {
 
         // console.log("MAKEMOVE");
 
         // console.log(move.end);
 
-        let dash = move.end ? move.minimax : move.mcts;
+        let dash = move.terminal ? move.minimax : move.mcts;
+
+        console.log(dash);
 
             // console.log(i, player);
 
@@ -194,7 +206,7 @@ const aiTurn = () => {
                 //     squares.blue - squares.pink > 0 ? bluesW++ : pinksW++; //
                 //     console.log(turn++, bluesW, pinksW);
                 //     clearInterval(turnInterval);
-                //     // document.querySelector('h1').innerText = String(bluesW) + " " + String(pinksW);
+                //     document.querySelector('h1').innerText = String(bluesW) + " " + String(pinksW);
                 //     initBoard();
                 //     setTimeout(rePlay, 2000);
                 // }
@@ -212,7 +224,7 @@ const aiTurn = () => {
             //     squares.blue - squares.pink > 0 ? bluesW++ : pinksW++; //
             //     console.log(turn++, pinksW, pinksW);
             //     clearInterval(turnInterval);
-            //     // document.querySelector('h1').innerText = String(bluesW) + " " + String(pinksW);
+            //     document.querySelector('h1').innerText = String(bluesW) + " " + String(pinksW);
             //     initBoard();
             //     setTimeout(rePlay, 2000);
             // }
@@ -226,6 +238,118 @@ const aiTurn = () => {
             setTimeout(enableTouch, 250);
 
     }
+
+    if (player == blue) {
+
+        let [dash, i] = minimax(dashes, squares, 500);
+
+        move.minimax = dash[0];
+
+        move.terminal = true;
+
+        makeMove();
+
+        // const worker1 = new Worker("./js/worker_minimax.js");
+
+        // // if (worker1 == undefined) worker1 = new Worker("./js/worker_minimax.js");
+
+        // worker1.postMessage([dashes, squares, player, 500]);
+
+        // worker1.addEventListener("message", e => {
+
+        //     // worker1.terminate();
+             
+        //     // console.log("WORKER2");
+
+        //     let [dash, i] = e.data;
+
+        //     // console.log(dash, i);
+
+        //     move.minimax = dash;
+        //     move.terminal = freeDashes(dashes).length <= i;
+
+        //     move.terminal = true;
+
+        //     // console.log(move.terminal);
+            
+        //     // counter++;
+
+        //     // if (counter == 2) makeMove();
+
+        //     makeMove();
+
+        //     // console.log(i, freeDashes(dashes).length, player);
+
+        //     // if (freeDashes(dashes).length <= i) mcts = false;
+
+        // }, {once: true});
+
+        // const worker2 = new Worker("./js/worker_mcts.js");
+
+        // // if (worker2 == undefined) worker2 = new Worker("./js/worker_mcts.js");
+
+        // worker2.postMessage([dashes, squares, player]);
+
+        // worker2.addEventListener("message", e => {
+
+        //     // worker2.terminate();
+
+        //     // console.log("WORKER1");
+
+        //     // console.log(e.data);
+
+        //     // console.log(dash);
+
+        //     // while (dash == undefined) {};
+
+        //     let [dash, i] = e.data;
+
+        //     // console.log(dash, i);
+
+
+        //     move.mcts = dash;
+
+        //     counter++;
+
+        //     if (counter == 2) makeMove();            
+           
+        // }, {once: true});
+
+    // console.log(webWorkers());
+
+
+    } else {
+
+        const worker3 = new Worker("./js/worker_minimax.js");
+
+        // if (worker3 == undefined) worker3 = new Worker("./js/worker_minimax.js");
+
+        worker3.postMessage([dashes, squares, player, 500]);
+
+        worker3.addEventListener("message", e => {
+
+            // worker3.terminate();
+
+            // console.log(e.data);
+    
+            let [dash, i] = e.data;
+
+            // console.log(i, player);
+
+    
+    
+            // alert(i);
+    
+           move.minimax = dash;
+           move.terminal = true;
+
+           makeMove();   
+        }, {once: true});
+
+        // console.log("END");
+    }
+
+    
 }
 
 const humanTurn = (e) => {
@@ -249,13 +373,11 @@ const humanTurn = (e) => {
 
             changeColor();
 
-            // requestAnimationFrame(() => {
-                // requestAnimationFrame(() => {
-                    // setTimeout(aiTurn, 500);
-                    setTimeout(aiTurn, 0);
-
-                // });
-            // }); 
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    setTimeout(aiTurn, 500);
+                });
+            }); 
         
             return;
         }
@@ -301,25 +423,45 @@ const initBoard = () => {
 
 const setColor = () => {
     playerColor = parseInt(localStorage.getItem("color"));
+
+    console.log(playerColor);
+
     player = playerColor;
+
+    setHeaderColors(playerColor);
 }
 
 const checkColor = () => {
 
     if (localStorage.color) {
         setColor();
-        showBoard();
-        enableTouch();
+        showChoice(false);
+        setTimeout(enableTouchChoice, 0);
+
+        // showBoard();
+        // enableTouch();
     } else {
-        showChoice();
-        setTimeout(enableTouchChoice, 500);
+        showChoice(true);
+        setTimeout(enableTouchChoice, 250);
     }
+}
+
+const webWorkers = () => {
+    if (worker1 == undefined) worker1 = new Worker("./js/worker_minimax.js");
+    if (worker2 == undefined) worker2 = new Worker("./js/worker_mcts.js");
+    // if (worker3 == undefined) worker3 = new Worker("./js/worker_minimax.js");
+    // if (worker4 == undefined) worker4 = new Worker("./js/worker_minimax.js");
+    // if (worker5 == undefined) worker5 = new Worker("./js/worker_minimax.js");
+    // if (worker6 == undefined) worker6 = new Worker("./js/worker_minimax.js");
+    // if (worker7 == undefined) worker7 = new Worker("./js/worker_minimax.js");
+
 }
 
 const init = () => {
 
     disableTapZoom();
     initBoard();
+    // webWorkers();
     checkColor();
 
     // if (localStorage.color) {
