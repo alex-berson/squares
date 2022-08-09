@@ -14,7 +14,12 @@ let pinksW = 0; //
 
 let cut = false;    //
 
-let worker1, worker2, worker3, worker4, worker5, worker6, worker7;
+let queue = []; //
+
+let worker1, worker2, worker3, worker4, worker5, worker6, worker7; //
+
+let input = 
+[12, 4, 15, 13, 6, 18, 20, 8, 22, 7, 17, 2, 11, 23, 0, 3, 16, 21, 9, 10, 19, 5, 14, 1]
 
 // console.log(worker1, worker4);
 
@@ -24,7 +29,7 @@ const storeColor = (color) =>  localStorage.setItem("color", color);
 
 const gameOver = () => {
 
-    console.log("GAME OVER");
+    // console.log("GAME OVER");
 
     showWinner();
 
@@ -75,6 +80,8 @@ const newGame = () => {
 
 const rePlay = () => {
 
+    queue = []; 
+
     playerColor = playerColor == blue ? pink : blue;
     player = playerColor;
 
@@ -82,12 +89,16 @@ const rePlay = () => {
 
     clearBoard();
 
-    setTimeout(() => {turnInterval = setInterval(aiTurn, 1500)}, 0);
+    // setTimeout(() => {turnInterval = setInterval(aiTurn, 1500)}, 0);
+
+    setTimeout(aiTurn, 1000);
+
 }
 
 const aiTurn = () => {
 
     let dash
+    let timeLimit = 500;
 
     depth = 1;
 
@@ -98,11 +109,14 @@ const aiTurn = () => {
             // dash = mcs(dashes, squares, startTime, timeLimit);
 
 
-    if (player == pink) {
+    if (player == blue) {
 
         // if (oneSide(dashes, squares)) {
         //     console.log("MCTS");
-        [dash, _] = minimax(dashes, squares, 500);
+        [dash, _] = minimax(dashes, squares, timeLimit);
+
+        // [dash, _] = mcts(dashes, squares);
+
         // } else {
         //     console.log("MINIMAX");
         //     [dash, _] = minimax(dashes, squares);
@@ -118,15 +132,19 @@ const aiTurn = () => {
 
     } else {
 
-        // dash = mcts(dashes, squares);
+        // [dash, _] = mcts(dashes, squares);
 
 
-        [dash, _] = minimax(dashes, squares, 500);
+        [dash, _] = minimax(dashes, squares, timeLimit);
     }
 
     // console.log(dash);
 
     if (dash == null) return;
+
+    queue.push(dash); //
+
+    dash = input.shift();
 
     let dashEl = getDashEl(dash);
 
@@ -138,36 +156,47 @@ const aiTurn = () => {
 
         // if (win(squares)) {
         //     squares.blue - squares.pink > 0 ? bluesW++ : pinksW++; //
-        //     console.log(turn++, bluesW, pinksW);
+        //     if (checkPattern()) console.log([...queue]);
+        //     console.log(turn++, bluesW, pinksW, squares.blue, squares.pink);
         //     clearInterval(turnInterval);
         //     initBoard();
         //     setTimeout(rePlay, 2000);
+        //     return;
         // }
 
         if (win(squares)) {
+            if (checkPattern()) console.log([...queue]);
             setTimeout(gameOver, 500); 
         } else {
-            setTimeout(aiTurn, 1000); //
+            // setTimeout(aiTurn, 1000); //
         }
+
+        setTimeout(aiTurn, 1000); //
 
         return;
     }
     
     // if (win(squares)) {
     //     squares.blue - squares.pink > 0 ? bluesW++ : pinksW++; //
-    //     console.log(turn++, pinksW, pinksW);
+    //     if (checkPattern()) console.log([...queue]);
+    //     console.log(turn++, bluesW, pinksW, squares.blue, squares.pink);
     //     clearInterval(turnInterval);
     //     initBoard();
     //     setTimeout(rePlay, 2000);
+    //     return;
     // }
 
     if (win(squares)) {
+        if (checkPattern()) console.log([...queue]);
         setTimeout(gameOver, 500); 
         return;
     } 
 
     changeColor();
     setTimeout(enableTouch, 250);
+
+    setTimeout(aiTurn, 500); //
+
 } 
 
 const aiTurn2 = () => {
@@ -424,7 +453,7 @@ const initBoard = () => {
 const setColor = () => {
     playerColor = parseInt(localStorage.getItem("color"));
 
-    console.log(playerColor);
+    // console.log(playerColor);
 
     player = playerColor;
 
@@ -464,6 +493,9 @@ const init = () => {
     // webWorkers();
     checkColor();
 
+    // showBoard();
+    // setPattern(); //
+
     // if (localStorage.color) {
 
     //     playerColor = parseInt(localStorage.getItem("color"));
@@ -477,15 +509,22 @@ const init = () => {
     //     setTimeout(enableTouchChoice, 2000);
     // }
 
-    // setTimeout(() => {
-    //     player = pink;
-    //     aiTurn();
-    // }, 1000);
+    setTimeout(() => {
+        player = blue;
+        // aiTurn();
 
-//    turnInterval = setInterval(aiTurn, 1500); //
+        setTimeout(aiTurn, 1500);
+
+        // turnInterval = setInterval(aiTurn, 1500); //
+
+    }, 3000);
+
+    // turnInterval = setInterval(aiTurn, 1500); //
+
+
 }
 
-window.addEventListener('load', () => document.fonts.ready.then(() => init()));
+window.onload = document.fonts.ready.then(init());
 
 // window.onload = () => {
 //     document.fonts.ready.then(() => {

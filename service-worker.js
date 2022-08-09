@@ -5,13 +5,12 @@ const files = [
   'css/style.css',
   'js/squares.js',
   'js/ui.js',
-  'js/worker.js',
-  'js/worker2.js',
   'js/utils.js',
-  'js/mcts.js',
   'js/minimax.js',
-  'fonts/roboto-regular-webfont.woff',
-  'fonts/roboto-bold-webfont.woff'
+  'images/kids/boy.svg',
+  'images/kids/girl.svg',
+  'fonts/Roboto-Regular-webfont.woff',
+  'fonts/Roboto-Bold-webfont.woff'
 ];
 
 self.addEventListener('install', event => {

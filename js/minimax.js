@@ -9,7 +9,7 @@ const evaluation = (squares) => {
 
     if (squares.blue + squares.pink == squares.length) return 10 * (squares.pink - squares.blue);
 
-        return squares.pink - squares.blue;
+    return squares.pink - squares.blue;
 }
 
 const alphabeta = (dashes, squares, depth, alpha, beta, maximizingPlayer, startTime, timeLimit, firstLevel) => {
@@ -95,9 +95,9 @@ const alphabeta = (dashes, squares, depth, alpha, beta, maximizingPlayer, startT
 const minimax = (dashes, squares, timeLimit) => {
 
     let startTime = new Date();
-    // let timeLimit = 1000;
+    // let timeLimit = 500;
     let dash, score, lastDash, lastScore;
-    let depth = 4;
+    let depth = 1;
 
     do {
         // scores = [];
@@ -119,7 +119,7 @@ const minimax = (dashes, squares, timeLimit) => {
 
     // await new Promise(r => setTimeout(r, timeLimit - (new Date() - startTime)));
 
-    console.log("depth: ", depth - 1, "time:", timeLimit);
+    // console.log("depth: ", depth - 1, "time:", timeLimit);
 
     // alert(depth - 1);
 

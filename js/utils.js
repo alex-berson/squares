@@ -66,7 +66,7 @@ const freeDashes = (dashes) => {
 
 const updateBoard = (dash, dashes, squares, color) => {
 
-    let filled = false;
+    let completed = false;
 
     dashes[dash] = color;
 
@@ -76,9 +76,9 @@ const updateBoard = (dash, dashes, squares, color) => {
 
         if (squares[n] == 4) {
             color == blue ? squares.blue++ : squares.pink++;
-            filled = true;
+            completed = true;
         }
     }
 
-    return filled;
+    return completed;
 }

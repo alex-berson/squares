@@ -1,29 +1,21 @@
 @font-face {
     font-family: 'Roboto';
-    src: url(../fonts/roboto-regular-webfont.woff);
+    src: url(../fonts/Roboto-Regular-webfont.woff);
 }
 
 @font-face {
     font-family: 'Roboto';
-    src: url(../fonts/roboto-bold-webfont.woff);
+    src: url(../fonts/Roboto-Bold-webfont.woff);
     font-weight: bold;
 }
 
 :root {
+    --size: 86vmin;
 
     --blue: lightskyblue;
     --pink: pink;
-
-    /* --blue: deepskyblue;
-    --pink: hotpink;
-
-    --blue: skyblue;
-    --pink: #ffa6c9; */
-
     --color1: var(--blue);
     --color2: var(--pink);
-
-    --size: 86vmin;
 }
 
 * {
@@ -35,6 +27,10 @@ body {
     margin: 0px;
     /* opacity: 0; */
     /* transition: opacity 2s ease; */
+}
+
+body:hover {
+    cursor: default;
 }
 
 #outer {
@@ -104,11 +100,18 @@ h1 {
     text-align: center;
     left: calc(50% + 1.3em);
     transform: translate(calc(-50% + 1.3em), 0);
+    /* transform: translate(calc(-50% + 2.7em), 0); */
+
+    /* transform: translate(calc(-50% + 3.0em), 0); */
+
     top: 26.5vw;
     display: none;
     opacity: 0;
     transition: opacity 2s ease;
     white-space: nowrap;
+    /* letter-spacing: 1.3px; */
+    /* text-indent: 44px; */
+
 }
 
 h1 span:nth-child(odd) {
@@ -148,6 +151,7 @@ h1 span:nth-child(even) {
     display: none;
     opacity: 0;
     transition: opacity 2s ease;
+    transform: rotate(90deg);
 
 }
 
@@ -446,9 +450,10 @@ img:hover {
 
     #designed {
         font-size: 1em;
-        text-align: center;
+        /* text-align: center; */
         top: 7.7em;
-       
+        /* letter-spacing: 2px; */
+        /* text-indent: 55px; */
        
 
     }  
@@ -458,12 +463,12 @@ img:hover {
     }
 }
 
-.noselect {
+/* .noselect {
 -webkit-tap-highlight-color: transparent;
       -webkit-touch-callout: none;
         -webkit-user-select: none; 
            -moz-user-select: none; 
             -ms-user-select: none; 
                 user-select: none; 
-}
+} */
  

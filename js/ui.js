@@ -311,4 +311,207 @@ const enableTouchChoice = () => {
 const disableTapZoom = () => {
     const preventDefault = (e) => e.preventDefault();
     document.body.addEventListener('touchstart', preventDefault, {passive: false});
+    document.body.addEventListener('mousedown', preventDefault, {passive: false});
+}
+
+
+
+
+const setPattern = () => {
+
+
+    // let order = [0,1,2,3,4,5,6,7,8,9,10,11,12];
+
+    let dashesEl = document.querySelectorAll('.dash');
+    let dashesVEl = document.querySelectorAll('.dash-v');
+
+    // order = shuffle(order);
+
+    dashesEl.forEach(dashEl => {
+
+        Math.round(Math.random()) ? dashEl.classList.add("blue") : dashEl.classList.add("pink");
+
+    });
+
+    dashesVEl.forEach(dashEl => {
+
+        Math.round(Math.random()) ? dashEl.classList.add("blue") : dashEl.classList.add("pink");
+
+    });
+
+    let boxes = document.querySelectorAll('.box');
+
+    boxes[0].classList.add("blue");
+    boxes[1].classList.add("pink");
+    boxes[2].classList.add("pink");
+    boxes[3].classList.add("blue");
+    boxes[4].classList.add("blue");
+    boxes[5].classList.add("pink");
+    boxes[6].classList.add("blue");
+    boxes[7].classList.add("pink");
+    boxes[8].classList.add("pink"); 
+    
+    
+    // boxes[0].classList.add("pink");
+    // boxes[1].classList.add("blue");
+    // boxes[2].classList.add("pink");
+    // boxes[3].classList.add("pink");
+    // boxes[4].classList.add("pink");
+    // boxes[5].classList.add("pink");
+    // boxes[6].classList.add("blue");
+    // boxes[7].classList.add("blue");
+    // boxes[8].classList.add("blue");
+
+    // boxes[0].classList.add("pink");
+    // boxes[1].classList.add("blue");
+    // boxes[2].classList.add("pink");
+    // boxes[3].classList.add("pink");
+    // boxes[4].classList.add("blue");
+    // boxes[5].classList.add("pink");
+    // boxes[6].classList.add("blue");
+    // boxes[7].classList.add("pink");
+    // boxes[8].classList.add("blue");
+
+    showWinner();
+
+}
+
+const checkPattern1 = () => {
+
+    let boxes = document.querySelectorAll('.box');
+
+    if (!boxes[0].classList.contains('blue')) return false;
+    if (!boxes[1].classList.contains('pink')) return false;
+    if (!boxes[2].classList.contains('pink')) return false;
+    if (!boxes[3].classList.contains('blue')) return false;
+    if (!boxes[4].classList.contains('blue')) return false;
+    if (!boxes[5].classList.contains('pink')) return false;
+    if (!boxes[6].classList.contains('blue')) return false;
+    if (!boxes[7].classList.contains('pink')) return false;
+    if (!boxes[8].classList.contains('pink')) return false;
+
+    return true;
+}
+
+const checkPattern2 = () => {
+
+    let boxes = document.querySelectorAll('.box');
+
+    if (!boxes[0].classList.contains('blue')) return false;
+    if (!boxes[1].classList.contains('blue')) return false;
+    if (!boxes[2].classList.contains('blue')) return false;
+    if (!boxes[3].classList.contains('pink')) return false;
+    if (!boxes[4].classList.contains('blue')) return false;
+    if (!boxes[5].classList.contains('pink')) return false;
+    if (!boxes[6].classList.contains('pink')) return false;
+    if (!boxes[7].classList.contains('pink')) return false;
+    if (!boxes[8].classList.contains('pink')) return false;
+
+    return true;
+}
+
+const checkPattern3 = () => {
+
+    let boxes = document.querySelectorAll('.box');
+
+    if (!boxes[0].classList.contains('pink')) return false;
+    if (!boxes[1].classList.contains('pink')) return false;
+    if (!boxes[2].classList.contains('blue')) return false;
+    if (!boxes[3].classList.contains('pink')) return false;
+    if (!boxes[4].classList.contains('blue')) return false;
+    if (!boxes[5].classList.contains('blue')) return false;
+    if (!boxes[6].classList.contains('pink')) return false;
+    if (!boxes[7].classList.contains('pink')) return false;
+    if (!boxes[8].classList.contains('blue')) return false;
+
+    return true;
+}
+
+const checkPattern4 = () => {
+
+    let boxes = document.querySelectorAll('.box');
+
+    if (!boxes[0].classList.contains('pink')) return false;
+    if (!boxes[1].classList.contains('pink')) return false;
+    if (!boxes[2].classList.contains('pink')) return false;
+    if (!boxes[3].classList.contains('pink')) return false;
+    if (!boxes[4].classList.contains('blue')) return false;
+    if (!boxes[5].classList.contains('pink')) return false;
+    if (!boxes[6].classList.contains('blue')) return false;
+    if (!boxes[7].classList.contains('blue')) return false;
+    if (!boxes[8].classList.contains('blue')) return false;
+
+    return true;
+}
+
+const checkPattern5 = () => {
+
+    let boxes = document.querySelectorAll('.box');
+
+    if (boxes[0].classList.contains('blue')) return false;
+    if (boxes[1].classList.contains('pink')) return false;
+    if (boxes[2].classList.contains('pink')) return false;
+    if (boxes[3].classList.contains('blue')) return false;
+    if (boxes[4].classList.contains('blue')) return false;
+    if (boxes[5].classList.contains('pink')) return false;
+    if (boxes[6].classList.contains('blue')) return false;
+    if (boxes[7].classList.contains('pink')) return false;
+    if (boxes[8].classList.contains('pink')) return false;
+
+    return true;
+}
+
+const checkPattern6 = () => {
+
+    let boxes = document.querySelectorAll('.box');
+
+    if (boxes[0].classList.contains('blue')) return false;
+    if (boxes[1].classList.contains('blue')) return false;
+    if (boxes[2].classList.contains('blue')) return false;
+    if (boxes[3].classList.contains('pink')) return false;
+    if (boxes[4].classList.contains('blue')) return false;
+    if (boxes[5].classList.contains('pink')) return false;
+    if (boxes[6].classList.contains('pink')) return false;
+    if (boxes[7].classList.contains('pink')) return false;
+    if (boxes[8].classList.contains('pink')) return false;
+
+    return true;
+}
+
+const checkPattern7 = () => {
+
+    let boxes = document.querySelectorAll('.box');
+
+    if (boxes[0].classList.contains('pink')) return false;
+    if (boxes[1].classList.contains('pink')) return false;
+    if (boxes[2].classList.contains('blue')) return false;
+    if (boxes[3].classList.contains('pink')) return false;
+    if (boxes[4].classList.contains('blue')) return false;
+    if (boxes[5].classList.contains('blue')) return false;
+    if (boxes[6].classList.contains('pink')) return false;
+    if (boxes[7].classList.contains('pink')) return false;
+    if (boxes[8].classList.contains('blue')) return false;
+
+    return true;
+}
+
+const checkPattern8 = () => {
+
+    let boxes = document.querySelectorAll('.box');
+
+    if (boxes[0].classList.contains('pink')) return false;
+    if (boxes[1].classList.contains('pink')) return false;
+    if (boxes[2].classList.contains('pink')) return false;
+    if (boxes[3].classList.contains('pink')) return false;
+    if (boxes[4].classList.contains('blue')) return false;
+    if (boxes[5].classList.contains('pink')) return false;
+    if (boxes[6].classList.contains('blue')) return false;
+    if (boxes[7].classList.contains('blue')) return false;
+    if (boxes[8].classList.contains('blue')) return false;
+
+    return true;
+}
+
+const checkPattern = () => {
+    return checkPattern1() || checkPattern2() || checkPattern3() || checkPattern4();
 }
