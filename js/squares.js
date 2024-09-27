@@ -1,62 +1,41 @@
-const blue = 1;
-const pink = 2;
-const size = 3;
-let dashes = [];
-let squares = [];
-let dashSquares = [];
-let player, playerColor;
+let blue = 1;
+let pink = 2;
+let size = 3;
+let player, firstPlayer;
+let dashes, squares, dashSquares;
 
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js')
-            .then(reg => {
-                console.log('Service worker registered!', reg);
-            })
-            .catch(err => {
-                console.log('Service worker registration failed: ', err);
-            });
-    });
-}
+const togglePlayer = () => player = player == blue ? pink : blue;
 
-const changeColor = () => player == blue ? player = pink : player = blue;
-
-const win = (squares) => squares.blue + squares.pink == size * size ? true : false;
-
-const winner = (squares) => squares.blue > squares.pink ? blue : pink;
-
-const timeOver = (startTime, timeLimit) => new Date() - startTime >= timeLimit;
-
-const storeColor = (color) =>  localStorage.setItem("color", color);
+const gameOver = (squares) => squares.blue + squares.pink == size ** 2;
 
 const shuffle = (arr) => {
 
-    let array = arr.slice();
-
-    for (let i = array.length - 1; i > 0; i--) {
+    for (let i = arr.length - 1; i > 0; i--) {
 
         let j = Math.floor(Math.random() * (i + 1));
 
-        [array[i], array[j]] = [array[j], array[i]]; 
+        [arr[i], arr[j]] = [arr[j], arr[i]]; 
     }
 
-    return array;
+    return arr;
 }
 
-const findAjacentSquares = () => {
+const initBoard = () => {
 
-    let dashSquares = [];
+    dashes = [];
+    squares = [];
+    squares.blue = 0;
+    squares.pink = 0;
 
     for (let i = 0; i < size * (size + 1) * 2; i++) {
-
-        if (i < size) dashSquares.push([i]);
-        if (i >= size && i < size * size) dashSquares.push([i - size, i]);
-        if (i >= size * size && i < size * (size + 1)) dashSquares.push([i - size]);
-        if (i >= size * (size + 1) && i % (size + 1) == 0) dashSquares.push([i - size * (size + 1) - (i - size * (size + 1)) / (size + 1)]);
-        if (i >= size * (size + 1) && i % (size + 1) != 0 && (i + 1) % (size + 1) != 0) dashSquares.push([i - size * (size + 1) - 1 - Math. floor((i - size * (size + 1)) / (size + 1)), i - size * (size + 1) - Math. floor((i - size * (size + 1)) / (size + 1))]);
-        if (i >= size * (size + 1) && (i + 1) % (size + 1) == 0) dashSquares.push([i - size * (size + 1) - 1 - (i - size * (size + 1) - size) / (size + 1)]);
+        dashes.push(0);
     }
 
-    return dashSquares;
+    for (let i = 0; i < size ** 2; i++) {
+        squares.push(0);
+    }
+
+    dashSquares = findAjacentSquares();
 }
 
 const copyBoard = (dashes, squares) => {
@@ -70,16 +49,16 @@ const copyBoard = (dashes, squares) => {
     return [newDashes, newSquares];
 }
 
-const freeDashes = (dashes) => {
+const getFreeDashes = (dashes) => {
 
-    let seq = [];
+    let freeDashes = [];
 
     for (let i = 0; i < dashes.length; i++) {
 
-        if (dashes[i] == 0) seq.push(i);
+        if (dashes[i] == 0) freeDashes.push(i);
     }
 
-    return seq;
+    return freeDashes;
 }
 
 const updateBoard = (dash, dashes, squares, color) => {
@@ -88,11 +67,11 @@ const updateBoard = (dash, dashes, squares, color) => {
 
     dashes[dash] = color;
 
-    for (let n of dashSquares[dash]) {
+    for (let i of dashSquares[dash]) {
 
-        squares[n]++;
+        squares[i]++;
 
-        if (squares[n] == 4) {
+        if (squares[i] == 4) {
             color == blue ? squares.blue++ : squares.pink++;
             completed = true;
         }
@@ -101,39 +80,109 @@ const updateBoard = (dash, dashes, squares, color) => {
     return completed;
 }
 
-const gameOver = () => {
+const findAjacentSquares = () => {
 
-    showWinner();
+    let dashSquares = [];
 
-    setTimeout(() => {
+    for (let i = 0; i < size * (size + 1) * 2; i++) {
 
-        document.querySelector('.board').classList.add("reset");
+        if (i < size) dashSquares.push([i]);
+        if (i >= size && i < size ** 2) dashSquares.push([i - size, i]);
+        if (i >= size ** 2 && i < size * (size + 1)) dashSquares.push([i - size]);
+        if (i >= size * (size + 1) && i % (size + 1) == 0) dashSquares.push([i - size * (size + 1) - (i - size * (size + 1)) / (size + 1)]);
+        if (i >= size * (size + 1) && i % (size + 1) != 0 && (i + 1) % (size + 1) != 0) dashSquares.push([i - size * (size + 1) - 1 - Math.floor((i - size * (size + 1)) / (size + 1)), i - size * (size + 1) - Math.floor((i - size * (size + 1)) / (size + 1))]);
+        if (i >= size * (size + 1) && (i + 1) % (size + 1) == 0) dashSquares.push([i - size * (size + 1) - 1 - (i - size * (size + 1) - size) / (size + 1)]);
+    }
 
-        if (touchScreen()){
-            document.querySelector('.board').addEventListener("touchstart", newGame);
-        } else {
-            document.querySelector('.board').addEventListener("mousedown", newGame);
+    return dashSquares;
+}
+
+const aiTurn = async () => {
+
+    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+    let timeLimit = 500;
+    let startTime = Date.now();
+    let dash = minimax(dashes, squares, startTime, timeLimit);
+    let delay = timeLimit - (Date.now() - startTime);
+
+    await sleep(delay);
+
+    if (dash == null) return;
+
+    let dashEl = getDashEl(dash);
+
+    fillDash(dashEl);
+    
+    if (updateBoard(dash, dashes, squares, player)) {
+
+        fillSquares(dash);
+
+        if (gameOver(squares)) {
+            setTimeout(endGame, 500); 
+            return;
         }
-    }, 500);
+        
+        setTimeout(aiTurn, 1000);
+        return;
+    }
+
+    if (gameOver(squares)) {
+        setTimeout(endGame, 500); 
+        return;
+    } 
+
+    togglePlayer();
+    setTimeout(enableTouch, 250);
+} 
+
+const humanTurn = (e) => {
+
+    let dashEl = e.currentTarget;
+
+    if (fillDash(dashEl)) {
+
+        let dash = getDash(dashEl);
+
+        disableTouch();
+
+        if (!updateBoard(dash, dashes, squares, player)) {
+
+            if (gameOver(squares)) {
+                setTimeout(endGame, 500); 
+                return;
+            } 
+
+            togglePlayer();
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    setTimeout(aiTurn, 500);
+                });
+            }); 
+        
+            return;
+        }
+
+        fillSquares(dash);
+
+        if (gameOver(squares)) {
+            setTimeout(endGame, 500); 
+            return;
+        } 
+
+        enableTouch();
+    }
 }
 
 const newGame = () => {
 
-    document.querySelector('.board').classList.remove("reset");
-
-    if (touchScreen()){
-        document.querySelector('.board').removeEventListener("touchstart", newGame);
-    } else {
-        document.querySelector('.board').removeEventListener("mousedown", newGame);
-    }
-
-    playerColor = playerColor == blue ? pink : blue;
-    player = playerColor;
-
     initBoard();
     clearBoard();
 
-    if (playerColor == localStorage.getItem("color")) {
+    player = firstPlayer = firstPlayer == blue ? pink : blue;
+
+    if (firstPlayer == localStorage.getItem('squares-color')) {
         setTimeout(enableTouch, 500);
         return;
     }   
@@ -147,126 +196,15 @@ const newGame = () => {
     }, 500);
 }
 
-const aiTurn = () => {
-
-    let dash
-    let timeLimit = 500;
-
-    depth = 1;
-    
-    dash = minimax(dashes, squares, timeLimit);
-
-    if (dash == null) return;
-
-    let dashEl = getDashEl(dash);
-
-    select(dashEl);
-
-    if (updateBoard(dash, dashes, squares, player)) {
-
-        fillSquares(dash);
-
-        if (win(squares)) {
-            setTimeout(gameOver, 500); 
-            return;
-        }
-        
-        setTimeout(aiTurn, 1000);
-        return;
-    }
-
-    if (win(squares)) {
-        setTimeout(gameOver, 500); 
-        return;
-    } 
-
-    changeColor();
-    setTimeout(enableTouch, 250);
-} 
-
-const humanTurn = (e) => {
-
-    let dashEl = e.currentTarget;
-
-    if (select(dashEl)) {
-
-        let dash = getDash(dashEl);
-
-        disableTouch();
-
-        if (!updateBoard(dash, dashes, squares, player)) {
-
-            if (win(squares)) {
-                setTimeout(gameOver, 500); 
-                return;
-            } 
-
-            changeColor();
-
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    setTimeout(aiTurn, 500);
-                });
-            }); 
-        
-            return;
-        }
-
-        fillSquares(dash);
-
-        if (win(squares)) {
-            setTimeout(gameOver, 500); 
-            return;
-        } 
-
-        enableTouch();
-    }
-}
-
-const initBoard = () => {
-
-    dashes = [];
-    squares = [];
-
-    squares.blue = 0;
-    squares.pink = 0;
-
-    for (let i = 0; i < size * (size + 1) * 2; i++) {
-        dashes.push(0);
-    }
-
-    for (let i = 0; i < size * size; i++) {
-        squares.push(0);
-    }
-
-    dashSquares = findAjacentSquares();
-}
-
-const setColor = () => {
-
-    playerColor = parseInt(localStorage.getItem("color"));
-    player = playerColor;
-
-    setHeaderColors(playerColor);
-}
-
-const checkColor = () => {
-
-    if (localStorage.color) {
-        setColor();
-        showChoice(false);
-        setTimeout(enableTouchChoice, 0);
-    } else {
-        showChoice(true);
-        setTimeout(enableTouchChoice, 250);
-    }
+const registerServiceWorker = () => {
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js');
 }
 
 const init = () => {
-
+    registerServiceWorker();
     disableTapZoom();
     initBoard();
-    checkColor();
+    setColors();
 }
 
-window.onload = document.fonts.ready.then(init());
+window.onload = () => document.fonts.ready.then(init);

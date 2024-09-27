@@ -1,3 +1,5 @@
+const timeOver = (startTime, timeLimit) => Date.now() - startTime >= timeLimit;
+
 const evaluation = (squares) => {
 
     let diff = player == blue ? squares.blue - squares.pink : squares.pink - squares.blue;
@@ -8,23 +10,22 @@ const evaluation = (squares) => {
 const alphabeta = (dashes, squares, depth, alpha, beta, maximizingPlayer, startTime, timeLimit, firstLevel) => {
 
     let bestScore;
-    let freeSeq = firstLevel ? shuffle(freeDashes(dashes)) : freeDashes(dashes);
     let opponent = player == blue ? pink : blue;
-    let bestDash = freeSeq[Math.floor(Math.random() * freeSeq.length)];
+    let freeDashes = firstLevel ? shuffle(getFreeDashes(dashes)) : getFreeDashes(dashes);
+    let bestDash = freeDashes[Math.floor(Math.random() * freeDashes.length)];
 
-    if (depth == 0 || freeSeq.length == 0) return [null, evaluation(squares)];
+    if (depth == 0 || freeDashes.length == 0) return [null, evaluation(squares)];
     if (timeOver(startTime, timeLimit)) return [null, null];
 
     if (maximizingPlayer) {
         
         bestScore = -Infinity;
         
-        for (let dash of freeSeq) {
+        for (let dash of freeDashes) {
 
             let [newDashes, newSquares] = copyBoard(dashes, squares);
             let maximizingPlayer = updateBoard(dash, newDashes, newSquares, player);
-    
-            [_, score] = alphabeta(newDashes, newSquares, depth - 1, alpha, beta, maximizingPlayer, startTime, timeLimit, false);
+            let [_, score] = alphabeta(newDashes, newSquares, depth - 1, alpha, beta, maximizingPlayer, startTime, timeLimit, false);
 
             if (score > bestScore) [bestScore, bestDash] = [score, dash];
 
@@ -39,12 +40,11 @@ const alphabeta = (dashes, squares, depth, alpha, beta, maximizingPlayer, startT
 
         bestScore = Infinity;
         
-        for (let dash of freeSeq) {
+        for (let dash of freeDashes) {
 
             let [newDashes, newSquares] = copyBoard(dashes, squares);
             let maximizingPlayer = !updateBoard(dash, newDashes, newSquares, opponent);
-
-            [_, score] = alphabeta(newDashes, newSquares, depth - 1, alpha, beta, maximizingPlayer, startTime, timeLimit, false);
+            let [_, score] = alphabeta(newDashes, newSquares, depth - 1, alpha, beta, maximizingPlayer, startTime, timeLimit, false);
     
             if (score < bestScore) [bestScore, bestDash] = [score, dash];
 
@@ -57,24 +57,21 @@ const alphabeta = (dashes, squares, depth, alpha, beta, maximizingPlayer, startT
     }
 }
 
-const minimax = (dashes, squares, timeLimit) => {
+const minimax = (dashes, squares, startTime, timeLimit) => {
 
-    let startTime = new Date();
-    let dash, bestDash;
+    let bestDash;
     let depth = 1;
 
     do {
         
-        [dash, _] = alphabeta(dashes, squares, depth, -Infinity, Infinity, true, startTime, timeLimit, true);
+        let [dash, _] = alphabeta(dashes, squares, depth, -Infinity, Infinity, true, startTime, timeLimit, true);
 
         if (timeOver(startTime, timeLimit)) break;
 
         bestDash = dash;
         depth++;
 
-    } while (depth <= freeDashes(dashes).length);
-
-    do {} while (!timeOver(startTime, timeLimit));
+    } while (depth <= getFreeDashes(dashes).length);
 
     return bestDash;
 }

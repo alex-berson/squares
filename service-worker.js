@@ -1,15 +1,13 @@
-const cacheName = 'cache-v1';
+const cacheName = 'cache-v2';
 const files = [
-  'https://alex-berson.github.io/squares/',
+  '/',
   'index.html',
   'css/style.css',
   'js/squares.js',
   'js/ui.js',
   'js/ai.js',
-  'images/kids/boy.svg',
-  'images/kids/girl.svg',
-  'fonts/Roboto-Regular-webfont.woff',
-  'fonts/Roboto-Bold-webfont.woff'
+  'fonts/roboto-regular.woff',
+  'fonts/roboto-bold.woff'
 ];
 
 self.addEventListener('install', event => {
